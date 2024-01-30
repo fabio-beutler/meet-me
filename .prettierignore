@@ -1,0 +1,10 @@
+.next/
+.turbo/
+_next/
+__tmp__/
+dist/
+node_modules/
+.git/
+.vscode/
+
+pnpm-lock.yaml
