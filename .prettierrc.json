@@ -7,5 +7,6 @@
   "semi": true,
   "useTabs": false,
   "endOfLine": "lf",
+  "printWidth": 90,
   "plugins": ["prettier-plugin-tailwindcss"]
 }
