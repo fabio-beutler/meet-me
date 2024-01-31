@@ -8,5 +8,8 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "cSpell.words": ["Parens"]
+  "cSpell.words": [
+    "Parens",
+    "shadcn"
+  ]
 }
