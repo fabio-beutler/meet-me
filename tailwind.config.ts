@@ -76,6 +76,9 @@ const config = {
       fontFamily: {
         sans: ['var(--roboto)', ...fontFamily.sans],
       },
+      fontSize: {
+        '7.3xl': ['4rem', { lineHeight: '1.2' }],
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
