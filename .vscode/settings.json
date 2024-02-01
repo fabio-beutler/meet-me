@@ -10,6 +10,7 @@
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "cSpell.words": [
+    "hookform",
     "Parens",
     "shadcn"
   ]
