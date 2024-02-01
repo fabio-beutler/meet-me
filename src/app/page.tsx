@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { BgGrid } from '@/assets/bg-grid';
 import calendarImg from '@/assets/calendar-bg.png';
+import { ClaimUsernameForm } from '@/components/forms/claim-username-form';
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
           Conecte seu calendário e permita que as pessoas marquem agendamentos no seu
           tempo livre.
         </p>
+        <ClaimUsernameForm />
         <BgGrid className="fixed left-[max(0px,calc(100vw-1160px)/2)] top-1/2 -z-10 -translate-y-1/2" />
       </div>
       <Image
