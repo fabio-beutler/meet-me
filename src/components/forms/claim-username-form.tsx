@@ -8,24 +8,25 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
-  username: z.string().min(1, {
-    message: 'O nome de usuário é obrigatório',
+  username: z.string().min(3, {
+    message: 'O usuário precisa ter no mínimo 3 letras',
   }),
 });
 
-type FormSchema = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof formSchema>;
 
 export function ClaimUsernameForm() {
-  const form = useForm<FormSchema>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
     },
   });
 
-  function onSubmit(values: FormSchema) {
+  function onSubmit(values: FormData) {
     console.log(values);
   }
 
@@ -35,7 +36,7 @@ export function ClaimUsernameForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-5 grid grid-cols-1 gap-2 rounded-lg border border-muted-foreground/30 bg-muted p-6 sm:grid-cols-[1fr_auto]"
       >
-        <div className="relative flex items-center">
+        <div className="relative">
           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 select-none text-sm text-muted-foreground">
             ignite.com/
           </span>
@@ -45,15 +46,19 @@ export function ClaimUsernameForm() {
             autoComplete="username"
             {...form.register('username')}
           />
-          <span className="absolute -bottom-[1.4rem] left-0 text-sm text-red-500">
-            {form.formState.errors.username?.message}
-          </span>
         </div>
         <Button type="submit" className="flex gap-1 font-bold">
           Reservar
           <ArrowRight className="size-4" />
         </Button>
       </form>
+      <span
+        className={cn('mt-2 block text-sm text-muted-foreground', {
+          'text-red-500': form.formState.errors.username,
+        })}
+      >
+        {form.formState.errors.username?.message ?? 'Digite o nome do usuário desejado'}
+      </span>
     </Form>
   );
 }
