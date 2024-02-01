@@ -1,6 +1,8 @@
+import './globals.css';
+
 import type { Metadata } from 'next';
 import { Roboto_Flex } from 'next/font/google';
-import './globals.css';
+
 import { cn } from '@/lib/utils';
 
 const roboto = Roboto_Flex({ subsets: ['latin'], variable: '--roboto' });
