@@ -5,9 +5,10 @@ import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input, InputWithPrefix } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
@@ -38,27 +39,23 @@ export function ClaimUsernameForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-5 grid grid-cols-1 gap-2 rounded-lg border border-muted-foreground/30 bg-muted p-6 sm:grid-cols-[1fr_auto]"
-      >
-        <div className="relative">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 select-none text-sm text-muted-foreground">
-            ignite.com/
-          </span>
-          <Input
+      <Box asChild className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto]">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <InputWithPrefix
+            prefix="ignite.com/"
             type="text"
             placeholder="seu-usuario"
-            className="border-none pl-[83px]"
+            className="border-none"
             autoComplete="username"
             {...form.register('username')}
           />
-        </div>
-        <Button type="submit" className="flex gap-1 font-bold">
-          Reservar
-          <ArrowRight className="size-4" />
-        </Button>
-      </form>
+          <Button type="submit" className="flex gap-1 font-bold">
+            Reservar
+            <ArrowRight className="size-4" />
+          </Button>
+        </form>
+      </Box>
+
       <span
         className={cn('mt-2 block text-sm text-muted-foreground', {
           'text-red-500': form.formState.errors.username,
