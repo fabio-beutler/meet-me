@@ -47,7 +47,8 @@ export function ClaimUsernameForm() {
             ignite.com/
           </span>
           <Input
-            placeholder="seu usuário"
+            type="text"
+            placeholder="seu-usuario"
             className="border-none pl-[83px]"
             autoComplete="username"
             {...form.register('username')}
