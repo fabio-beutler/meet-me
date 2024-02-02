@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -41,16 +42,19 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function RegisterUserForm() {
+  const searchParams = useSearchParams();
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      username: searchParams.get('username') ?? '',
       name: '',
     },
   });
 
-  function onSubmit(values: FormData) {
+  async function onSubmit(values: FormData) {
     console.log(values);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   return (
@@ -101,7 +105,12 @@ export function RegisterUserForm() {
             className="flex w-full items-center gap-2"
             disabled={form.formState.isSubmitting}
           >
-            Próximo passo <ArrowRight className="size-4" />
+            Próximo passo
+            {form.formState.isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <ArrowRight className="size-4" />
+            )}
           </Button>
         </form>
       </Box>

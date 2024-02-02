@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -26,6 +27,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function ClaimUsernameForm() {
+  const router = useRouter();
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,13 +36,15 @@ export function ClaimUsernameForm() {
     },
   });
 
-  function onSubmit(values: FormData) {
+  async function onSubmit(values: FormData) {
     console.log(values);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    router.push(`/register?username=${encodeURIComponent(values.username)}`);
   }
 
   return (
     <Form {...form}>
-      <Box asChild className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto]">
+      <Box asChild className="mt-5 flex flex-col gap-2 sm:flex-row">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <InputWithPrefix
             prefix="ignite.com/"
@@ -49,9 +54,17 @@ export function ClaimUsernameForm() {
             autoComplete="username"
             {...form.register('username')}
           />
-          <Button type="submit" className="flex gap-1 font-bold">
-            Reservar
-            <ArrowRight className="size-4" />
+          <Button
+            type="submit"
+            className="flex min-w-36 gap-1 font-bold"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'Reservando' : 'Reservar'}
+            {form.formState.isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <ArrowRight className="size-4" />
+            )}
           </Button>
         </form>
       </Box>
