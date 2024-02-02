@@ -11,9 +11,15 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
-  username: z.string().min(3, {
-    message: 'O usuário precisa ter no mínimo 3 letras',
-  }),
+  username: z
+    .string()
+    .min(3, {
+      message: 'O usuário precisa ter no mínimo 3 letras',
+    })
+    .regex(/^([a-z\\\\-]+)$/i, {
+      message: 'O usuário só pode conter letras e hifens',
+    })
+    .transform((username) => username.toLowerCase()),
 });
 
 type FormData = z.infer<typeof formSchema>;
