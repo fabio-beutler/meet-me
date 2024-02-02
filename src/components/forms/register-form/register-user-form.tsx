@@ -28,10 +28,14 @@ const formSchema = z.object({
       message: 'O usuário só pode conter letras e hifens',
     })
     .transform((username) => username.toLowerCase()),
-  name: z.string().min(1, {
-    message: 'O nome é obrigatório',
-  }),
-  asdf: z.string(),
+  name: z
+    .string()
+    .min(1, {
+      message: 'O nome é obrigatório',
+    })
+    .refine((name) => name.trim().split(' ').length > 1, {
+      message: 'Digite seu nome completo',
+    }),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -92,7 +96,11 @@ export function RegisterUserForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="flex w-full items-center gap-2">
+          <Button
+            type="submit"
+            className="flex w-full items-center gap-2"
+            disabled={form.formState.isSubmitting}
+          >
             Próximo passo <ArrowRight className="size-4" />
           </Button>
         </form>
