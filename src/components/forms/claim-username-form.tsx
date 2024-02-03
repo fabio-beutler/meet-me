@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { Input, InputWithPrefix } from '@/components/ui/input';
+import { InputWithPrefix } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
