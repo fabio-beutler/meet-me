@@ -18,43 +18,27 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input, InputWithPrefix } from '@/components/ui/input';
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(3, {
-      message: 'O usuário precisa ter no mínimo 3 letras',
-    })
-    .regex(/^([a-z\\\\-]+)$/i, {
-      message: 'O usuário só pode conter letras e hifens',
-    })
-    .transform((username) => username.toLowerCase()),
-  name: z
-    .string()
-    .min(1, {
-      message: 'O nome é obrigatório',
-    })
-    .refine((name) => name.trim().split(' ').length > 1, {
-      message: 'Digite seu nome completo',
-    }),
-});
-
-type FormData = z.infer<typeof formSchema>;
+import { createUser } from '@/lib/actions/user';
+import { userSchema } from '@/lib/validations/user';
 
 export function RegisterUserForm() {
   const searchParams = useSearchParams();
 
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
       username: searchParams.get('username') ?? '',
       name: '',
     },
   });
 
-  async function onSubmit(values: FormData) {
-    console.log(values);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+  async function onSubmit(values: z.infer<typeof userSchema>) {
+    try {
+      const createdUser = await createUser(values);
+      console.log(createdUser);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
