@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Loader2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -24,6 +24,7 @@ import { userSchema } from '@/lib/validations/user';
 
 export function RegisterUserForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
@@ -39,7 +40,7 @@ export function RegisterUserForm() {
       if (createdUser.error) {
         return toast.error(createdUser.error);
       }
-      //TODO
+      router.push('/register/connect-calendar');
     } catch (error: any) {
       console.error(error.message);
     }

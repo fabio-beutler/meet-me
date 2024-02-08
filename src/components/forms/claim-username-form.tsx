@@ -37,8 +37,6 @@ export function ClaimUsernameForm() {
   });
 
   async function onSubmit(values: FormData) {
-    console.log(values);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     router.push(`/register?username=${encodeURIComponent(values.username)}`);
   }
 
