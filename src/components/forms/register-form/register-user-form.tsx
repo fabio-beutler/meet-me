@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Box } from '@/components/ui/box';
@@ -35,7 +36,10 @@ export function RegisterUserForm() {
   async function onSubmit(values: z.infer<typeof userSchema>) {
     try {
       const createdUser = await createUser(values);
-      console.log(createdUser);
+      if (createdUser.error) {
+        return toast.error(createdUser.error);
+      }
+      //todo
     } catch (error: any) {
       console.error(error.message);
     }

@@ -10,9 +10,11 @@ export async function createUser(user: z.infer<typeof userSchema>) {
     where: { username: user.username },
   });
 
-  if (existingUser) throw new Error('User already exists');
+  if (existingUser) return { data: null, error: 'User already exists' };
 
-  return prisma.user.create({
+  const createdUser = prisma.user.create({
     data: user,
   });
+
+  return { data: createdUser, error: null };
 }
