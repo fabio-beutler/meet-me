@@ -47,7 +47,7 @@ export function RegisterUserForm() {
 
   return (
     <Form {...form}>
-      <Box asChild className="mt-6 space-y-4">
+      <Box asChild className="space-y-4">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}

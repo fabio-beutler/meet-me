@@ -13,7 +13,9 @@ export default function RegisterPage() {
         <MultiStep size={4} currentStep={1} />
       </header>
 
-      <RegisterUserForm />
+      <div className="mt-6 ">
+        <RegisterUserForm />
+      </div>
     </main>
   );
 }
