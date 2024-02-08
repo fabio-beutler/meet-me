@@ -58,7 +58,7 @@ export function RegisterUserForm() {
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <InputWithPrefix
-                    prefix="ignite.com/"
+                    prefix="meet.me/"
                     placeholder="seu-usuario"
                     {...field}
                   />

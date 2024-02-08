@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Roboto_Flex } from 'next/font/google';
 
+import { Providers } from '@/app/providers';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +27,7 @@ export default function RootLayout({
           roboto.variable,
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
         <Toaster richColors />
       </body>
     </html>

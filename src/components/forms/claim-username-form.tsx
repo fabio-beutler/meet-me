@@ -45,7 +45,7 @@ export function ClaimUsernameForm() {
       <Box asChild className="mt-5 flex flex-col gap-2 sm:flex-row">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <InputWithPrefix
-            prefix="ignite.com/"
+            prefix="meet.me/"
             type="text"
             placeholder="seu-usuario"
             className="border-none"
