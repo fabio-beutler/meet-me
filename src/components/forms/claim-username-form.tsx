@@ -18,7 +18,7 @@ const formSchema = z.object({
     .min(3, {
       message: 'O usuário precisa ter no mínimo 3 letras',
     })
-    .regex(/^([a-z\\\\-]+)$/i, {
+    .regex(/^([a-z\\-]+)$/i, {
       message: 'O usuário só pode conter letras e hifens',
     })
     .transform((username) => username.toLowerCase()),

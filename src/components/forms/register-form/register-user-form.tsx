@@ -36,8 +36,8 @@ export function RegisterUserForm() {
     try {
       const createdUser = await createUser(values);
       console.log(createdUser);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error(error.message);
     }
   }
 
@@ -72,7 +72,7 @@ export function RegisterUserForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nome</FormLabel>
                 <FormControl>
                   <Input placeholder="Seu nome" {...field} />
                 </FormControl>
