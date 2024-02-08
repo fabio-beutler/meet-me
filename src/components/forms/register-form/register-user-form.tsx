@@ -39,7 +39,7 @@ export function RegisterUserForm() {
       if (createdUser.error) {
         return toast.error(createdUser.error);
       }
-      //todo
+      //TODO
     } catch (error: any) {
       console.error(error.message);
     }
