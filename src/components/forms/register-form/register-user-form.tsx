@@ -79,7 +79,7 @@ export function RegisterUserForm() {
               <FormItem>
                 <FormLabel>Nome</FormLabel>
                 <FormControl>
-                  <Input placeholder="Seu nome" {...field} />
+                  <Input autoFocus placeholder="Seu nome" {...field} />
                 </FormControl>
                 <FormMessage className="text-xs">
                   <FormDescription className="text-xs">
