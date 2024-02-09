@@ -79,6 +79,9 @@ const config = {
       fontSize: {
         '7.3xl': ['4rem', { lineHeight: '1.2' }],
       },
+      brightness: {
+        30: '0.3',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

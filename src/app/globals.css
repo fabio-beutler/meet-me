@@ -54,3 +54,9 @@
     @apply border-border;
   }
 }
+
+@layer utilities {
+  .invert-calendar-picker {
+    @apply [&::-webkit-calendar-picker-indicator]:brightness-30 [&::-webkit-calendar-picker-indicator]:invert;
+  }
+}

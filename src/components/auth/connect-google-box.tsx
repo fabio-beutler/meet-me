@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowRight, Check } from 'lucide-react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
@@ -47,9 +48,11 @@ export function ConnectGoogleBox() {
           acesso ao Google Calendar
         </p>
       )}
-      <Button type="submit" className="w-full" disabled={!isSignedIn}>
-        Próximo passo
-        <ArrowRight className="ml-2 size-4" />
+      <Button asChild className="w-full" disabled={!isSignedIn}>
+        <Link href="/register/time-intervals">
+          Próximo passo
+          <ArrowRight className="ml-2 size-4" />
+        </Link>
       </Button>
     </Box>
   );
