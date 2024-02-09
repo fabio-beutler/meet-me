@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { WeekDay } from '@/lib/validations/time';
+import { WeekDay } from '@/lib/validations/datetime';
 
 export function TimeIntervalsForm() {
   const form = useForm({
