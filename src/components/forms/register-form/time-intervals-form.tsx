@@ -13,7 +13,11 @@ import { Input } from '@/components/ui/input';
 import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
 
 export function TimeIntervalsForm() {
-  const form = useForm<z.infer<typeof timeIntervalsSchema>>({
+  const form = useForm<
+    z.input<typeof timeIntervalsSchema>,
+    any,
+    z.output<typeof timeIntervalsSchema>
+  >({
     resolver: zodResolver(timeIntervalsSchema),
     defaultValues: {
       intervals: [
@@ -32,7 +36,7 @@ export function TimeIntervalsForm() {
 
   const watchingIntervals = form.watch('intervals');
 
-  async function onSubmit(values: any) {
+  async function onSubmit(values: z.output<typeof timeIntervalsSchema>) {
     try {
       console.log(values);
     } catch (error: any) {
