@@ -1,17 +1,20 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { WeekDay } from '@/lib/validations/datetime';
+import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
 
 export function TimeIntervalsForm() {
-  const form = useForm({
+  const form = useForm<z.infer<typeof timeIntervalsSchema>>({
+    resolver: zodResolver(timeIntervalsSchema),
     defaultValues: {
       intervals: [
         { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
@@ -93,7 +96,12 @@ export function TimeIntervalsForm() {
               </div>
             ))}
           </div>
-          <Button type="submit">
+          {form.formState.errors.intervals && (
+            <p className="text-destructive brightness-150">
+              {form.formState.errors?.intervals.root?.message}
+            </p>
+          )}
+          <Button type="submit" disabled={form.formState.isSubmitting}>
             Próximo passo <ArrowRight className="ml-2 size-4" />
           </Button>
         </form>
