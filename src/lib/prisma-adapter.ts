@@ -2,7 +2,7 @@ import { type PrismaClient } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { Adapter } from 'next-auth/adapters';
 
-export function PrismaAdapter(prisma: PrismaClient, options = {}): Adapter {
+export function PrismaAdapter(prisma: PrismaClient): Adapter {
   return {
     async createUser(user) {
       const userIdOnCookies = cookies().get('@meetMe:userId');
