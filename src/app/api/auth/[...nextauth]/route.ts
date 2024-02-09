@@ -38,6 +38,9 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
+    session: async ({ session, user }) => {
+      return { ...session, user };
+    },
   },
 };
 
