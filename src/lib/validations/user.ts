@@ -21,5 +21,5 @@ export const userSchema = z.object({
 });
 
 export const updateProfileSchema = z.object({
-  bio: z.string().optional(),
+  bio: z.string(),
 });
