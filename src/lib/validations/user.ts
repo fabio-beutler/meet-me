@@ -19,3 +19,7 @@ export const userSchema = z.object({
       message: 'Digite seu nome completo',
     }),
 });
+
+export const updateProfileSchema = z.object({
+  bio: z.string().optional(),
+});

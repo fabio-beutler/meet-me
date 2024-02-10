@@ -1,10 +1,12 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
 import { z } from 'zod';
 
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/prisma';
-import { userSchema } from '@/lib/validations/user';
+import { updateProfileSchema, userSchema } from '@/lib/validations/user';
 
 export async function createUser(user: z.infer<typeof userSchema>) {
   const existingUser = await prisma.user.findUnique({
@@ -23,4 +25,18 @@ export async function createUser(user: z.infer<typeof userSchema>) {
   });
 
   return { data: createdUser, error: null };
+}
+
+export async function updateUser(values: z.infer<typeof updateProfileSchema>) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return { data: null, error: 'Usuário não autenticado' };
+  }
+
+  // const updatedUser = await prisma.user.update({
+  //   data: values,
+  // });
+
+  return { data: 'success', error: null };
 }
