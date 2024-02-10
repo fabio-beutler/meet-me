@@ -10,8 +10,10 @@
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "cSpell.words": [
+    "datetime",
     "hookform",
     "monday",
+    "nextauth",
     "Parens",
     "roboto",
     "shadcn",
