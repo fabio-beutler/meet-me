@@ -34,9 +34,10 @@ export async function updateUser(values: z.infer<typeof updateProfileSchema>) {
     return { data: null, error: 'Usuário não autenticado' };
   }
 
-  // const updatedUser = await prisma.user.update({
-  //   data: values,
-  // });
+  const updatedUser = await prisma.user.update({
+    where: { id: session.user.id },
+    data: values,
+  });
 
-  return { data: 'success', error: null };
+  return { data: updatedUser, error: null };
 }

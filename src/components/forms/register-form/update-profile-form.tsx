@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -51,7 +50,7 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
       if (updatedUser.error) {
         return toast.error(updatedUser.error);
       }
-      // router.push('/register/connect-calendar');
+      router.push(`/schedule/${props.session?.user.username}`);
     } catch (error: any) {
       console.error(error.message);
     }
