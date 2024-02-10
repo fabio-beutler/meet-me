@@ -47,8 +47,7 @@ export function TimeIntervalsForm() {
       if (createdUser.error) {
         return toast.error(createdUser.error);
       }
-      toast.success(createdUser.data);
-      // router.push('/register/userDetails');
+      router.push('/register/update-profile');
     } catch (error: any) {
       console.error(error.message);
     }
