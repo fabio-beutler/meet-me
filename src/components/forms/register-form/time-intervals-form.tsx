@@ -2,7 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Box } from '@/components/ui/box';
@@ -10,9 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { createTimeInterval } from '@/lib/actions/time-intervals';
 import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
 
 export function TimeIntervalsForm() {
+  const router = useRouter();
+
   const form = useForm<
     z.input<typeof timeIntervalsSchema>,
     any,
@@ -38,7 +43,12 @@ export function TimeIntervalsForm() {
 
   async function onSubmit(values: z.output<typeof timeIntervalsSchema>) {
     try {
-      console.log(values);
+      const createdUser = await createTimeInterval(values);
+      if (createdUser.error) {
+        return toast.error(createdUser.error);
+      }
+      toast.success(createdUser.data);
+      // router.push('/register/userDetails');
     } catch (error: any) {
       console.error(error.message);
     }
