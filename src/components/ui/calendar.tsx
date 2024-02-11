@@ -9,53 +9,57 @@ export type CalendarProps = React.ComponentProps<'div'>;
 
 function Calendar({ className, ...props }: CalendarProps) {
   return (
-    <div data-id="calendar container" className={cn(className)} {...props}>
-      <div data-id="calendar header">
-        <p data-id="calendar title">
-          Fevereiro <span>2024</span>
+    <div className={cn('flex flex-col gap-6 p-6', className)} {...props}>
+      <div className="flex items-center justify-between">
+        <p className="font-medium">
+          Fevereiro <span className="text-muted-foreground">2024</span>
         </p>
-        <div data-id="calendar actions">
-          <button>
-            <ChevronLeft />
+        <div className="flex gap-2 text-muted-foreground">
+          <button className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2">
+            <ChevronLeft className="size-5" />
           </button>
-          <button>
-            <ChevronRight />
+          <button className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2">
+            <ChevronRight className="size-5" />
           </button>
         </div>
       </div>
-      <table data-id="calendar body">
+      <table className="w-full table-fixed border-separate border-spacing-1">
         <thead>
           <tr>
-            <th>DOM.</th>
-            <th>SEG.</th>
-            <th>TER.</th>
-            <th>QUA.</th>
-            <th>SEX.</th>
-            <th>SÁB.</th>
+            <th className="text-sm font-medium text-gray-200">DOM.</th>
+            <th className="text-sm font-medium text-gray-200">SEG.</th>
+            <th className="text-sm font-medium text-gray-200">TER.</th>
+            <th className="text-sm font-medium text-gray-200">QUA.</th>
+            <th className="text-sm font-medium text-gray-200">SEX.</th>
+            <th className="text-sm font-medium text-gray-200">SÁB.</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="before:block before:bg-muted before:leading-3 before:text-transparent before:content-['.']">
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>
-              <button data-id="calendar day"></button>
+              <button className="aspect-square w-full rounded-sm bg-gray-600 text-center ring-gray-100 hover:bg-gray-500 focus:ring-2 disabled:cursor-default disabled:bg-none disabled:opacity-40 disabled:hover:bg-gray-600">
+                1
+              </button>
             </td>
             <td>
-              <button data-id="calendar day"></button>
+              <button
+                disabled
+                className="aspect-square w-full rounded-sm bg-gray-600 text-center ring-gray-100 hover:bg-gray-500 focus:ring-2 disabled:cursor-default disabled:bg-none disabled:opacity-40 disabled:hover:bg-gray-600"
+              >
+                2
+              </button>
             </td>
             <td>
-              <button data-id="calendar day"></button>
-            </td>
-            <td>
-              <button data-id="calendar day"></button>
-            </td>
-            <td>
-              <button data-id="calendar day">1</button>
-            </td>
-            <td>
-              <button data-id="calendar day">2</button>
-            </td>
-            <td>
-              <button data-id="calendar day">3</button>
+              <button
+                disabled
+                className="aspect-square w-full rounded-sm bg-gray-600 text-center ring-gray-100 hover:bg-gray-500 focus:ring-2 disabled:cursor-default disabled:bg-none disabled:opacity-40 disabled:hover:bg-gray-600"
+              >
+                3
+              </button>
             </td>
           </tr>
         </tbody>

@@ -5,7 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 
 export function CalendarStep() {
   return (
-    <Box className="relative grid max-w-full p-0">
+    <Box className="relative grid w-[540px] max-w-full grid-cols-1 p-0">
       <Calendar />
     </Box>
   );
