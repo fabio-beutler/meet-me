@@ -26,6 +26,7 @@ export const authOptions: NextAuthOptions = {
           username: profile.email.split('@')[0],
           email: profile.email,
           avatar_url: profile.picture,
+          bio: '',
         };
       },
     }),
