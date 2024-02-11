@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -22,14 +22,17 @@ import { Input, InputWithPrefix } from '@/components/ui/input';
 import { createUser } from '@/lib/actions/user';
 import { userSchema } from '@/lib/validations/user';
 
-export function RegisterUserForm() {
-  const searchParams = useSearchParams();
+interface RegisterUserFormProps {
+  searchParams: Record<string, string | undefined>;
+}
+
+export function RegisterUserForm(props: RegisterUserFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      username: searchParams.get('username') ?? '',
+      username: props.searchParams['username'] ?? '',
       name: '',
     },
   });

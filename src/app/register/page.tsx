@@ -1,7 +1,11 @@
 import { RegisterUserForm } from '@/components/forms/register-form/register-user-form';
 import { MultiStep } from '@/components/ui/multi-step';
 
-export default function RegisterPage() {
+interface RegisterPageProps {
+  searchParams: Record<string, string | undefined>;
+}
+
+export default function RegisterPage(props: RegisterPageProps) {
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
       <header className="px-6">
@@ -14,7 +18,7 @@ export default function RegisterPage() {
       </header>
 
       <div className="mt-6 ">
-        <RegisterUserForm />
+        <RegisterUserForm searchParams={props.searchParams} />
       </div>
     </main>
   );
