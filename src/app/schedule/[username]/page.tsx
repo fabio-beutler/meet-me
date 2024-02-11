@@ -1,3 +1,4 @@
+import { ScheduleForm } from '@/components/forms/schedule/schedule-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { prisma } from '@/lib/prisma';
 
@@ -53,7 +54,9 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
         <p className="text-lg text-muted-foreground">{user.bio}</p>
       </header>
 
-      {/* <Box className="mt-6"><Calendar /></Box> */}
+      <div className="mx-auto mb-0 mt-6">
+        <ScheduleForm />
+      </div>
     </main>
   );
 }
