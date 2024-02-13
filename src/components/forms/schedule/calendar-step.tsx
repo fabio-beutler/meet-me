@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Box } from '@/components/ui/box';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
@@ -7,7 +9,8 @@ import { cn } from '@/lib/utils';
 import { TimePicker } from './time-picker';
 
 export function CalendarStep() {
-  const isDateSelected = false;
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const isDateSelected = !!selectedDate;
 
   return (
     <Box
@@ -16,7 +19,7 @@ export function CalendarStep() {
         'w-[] grid-cols-1 md:grid-cols-[1fr_280px]': isDateSelected,
       })}
     >
-      <Calendar />
+      <Calendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
       {isDateSelected && <TimePicker />}
     </Box>

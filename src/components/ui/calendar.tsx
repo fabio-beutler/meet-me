@@ -3,10 +3,12 @@
 import {
   addDays,
   addMonths,
+  endOfDay,
   format,
   getDate,
   getDay,
   getDaysInMonth,
+  isBefore,
   set,
   subDays,
   subMonths,
@@ -16,7 +18,10 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-export type CalendarProps = React.ComponentProps<'div'>;
+export type CalendarProps = React.ComponentProps<'div'> & {
+  selectedDate: Date | null;
+  onSelectDate: (date: Date) => void;
+};
 
 type CalendarWeek = {
   week: number;
@@ -28,7 +33,7 @@ type CalendarWeek = {
 
 type CalendarWeeks = Array<CalendarWeek>;
 
-function Calendar({ className, ...props }: CalendarProps) {
+function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarProps) {
   const [currentDate, setCurrentDate] = React.useState(set(new Date(), { date: 1 }));
 
   const currentMonth = format(currentDate, 'MMMM');
@@ -49,7 +54,10 @@ function Calendar({ className, ...props }: CalendarProps) {
     );
     const calendarDays = [
       ...previousMonthFillArray.map((date) => ({ date, disabled: true })),
-      ...daysInMonthArray.map((date) => ({ date, disabled: false })),
+      ...daysInMonthArray.map((date) => ({
+        date,
+        disabled: isBefore(endOfDay(date), new Date()),
+      })),
       ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
     ];
     const calendarWeeks = calendarDays.reduce<CalendarWeeks>(
@@ -81,7 +89,7 @@ function Calendar({ className, ...props }: CalendarProps) {
 
   return (
     <div className={cn('flex flex-col gap-6 p-6', className)} {...props}>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between px-1">
         <p className="font-medium capitalize">
           {currentMonth} <span className="text-muted-foreground">{currentYear}</span>
         </p>
@@ -123,6 +131,7 @@ function Calendar({ className, ...props }: CalendarProps) {
                 <td key={day.date.toString()}>
                   <button
                     disabled={day.disabled}
+                    onClick={() => onSelectDate(day.date)}
                     className="aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900"
                   >
                     {getDate(day.date)}
