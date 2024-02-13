@@ -1,5 +1,6 @@
 'use client';
 
+import { addMonths, format, set, subMonths } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as React from 'react';
 
@@ -8,17 +9,40 @@ import { cn } from '@/lib/utils';
 export type CalendarProps = React.ComponentProps<'div'>;
 
 function Calendar({ className, ...props }: CalendarProps) {
+  const [currentDate, setCurrentDate] = React.useState(set(new Date(), { date: 1 }));
+
+  const currentMonth = format(currentDate, 'MMMM');
+  const currentYear = format(currentDate, 'y');
+
+  function handlePreviousMonth() {
+    setCurrentDate(subMonths(currentDate, 1));
+  }
+
+  function handleNextMonth() {
+    setCurrentDate(addMonths(currentDate, 1));
+  }
+
   return (
     <div className={cn('flex flex-col gap-6 p-6', className)} {...props}>
       <div className="flex items-center justify-between">
-        <p className="font-medium">
-          Fevereiro <span className="text-muted-foreground">2024</span>
+        <p className="font-medium capitalize">
+          {currentMonth} <span className="text-muted-foreground">{currentYear}</span>
         </p>
         <div className="flex gap-2 text-muted-foreground">
-          <button className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2">
+          <button
+            type="button"
+            onClick={handlePreviousMonth}
+            title="Mês anterior"
+            className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2"
+          >
             <ChevronLeft className="size-5" />
           </button>
-          <button className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2">
+          <button
+            type="button"
+            onClick={handleNextMonth}
+            title="Próximo mês"
+            className="rounded-sm leading-[0] ring-gray-100 hover:text-gray-100 focus:ring-2"
+          >
             <ChevronRight className="size-5" />
           </button>
         </div>

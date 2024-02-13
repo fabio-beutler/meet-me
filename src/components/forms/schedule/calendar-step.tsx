@@ -7,11 +7,11 @@ import { cn } from '@/lib/utils';
 import { TimePicker } from './time-picker';
 
 export function CalendarStep() {
-  const isDateSelected = true;
+  const isDateSelected = false;
 
   return (
     <Box
-      className={cn('relative grid max-w-full p-0', {
+      className={cn('relative mx-auto grid max-w-full p-0', {
         'w-[540px] grid-cols-1': !isDateSelected,
         'w-[] grid-cols-1 md:grid-cols-[1fr_280px]': isDateSelected,
       })}
