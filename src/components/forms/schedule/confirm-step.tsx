@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input, InputWithPrefix } from '@/components/ui/input';
+import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -26,15 +26,15 @@ export function ConfirmStep() {
 
   return (
     <Form {...form}>
-      <Box asChild className="space-y-4">
+      <Box asChild className="mx-auto max-w-[540px] space-y-4">
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div id="form header" className="flex items-center gap-3">
+          <div id="form header" className="flex items-center gap-4 pb-2 pt-1">
             <h2 className="flex items-center gap-2">
-              <Calendar className="size-4" />
+              <Calendar className="size-4 text-gray-300" />
               22 de Setembro de 2022
             </h2>
             <h2 className="flex items-center gap-2">
-              <Clock className="size-4" calcMode={20} />
+              <Clock className="size-4 text-gray-300" calcMode={20} />
               18:00h
             </h2>
           </div>
@@ -43,10 +43,10 @@ export function ConfirmStep() {
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Seu nome</FormLabel>
+              <FormItem className="pt-1">
+                <FormLabel className="text-sm">Seu nome</FormLabel>
                 <FormControl>
-                  <InputWithPrefix prefix="meet.me/" {...field} />
+                  <Input type="text" placeholder="John Doe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -57,9 +57,9 @@ export function ConfirmStep() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Endereço de e-mail</FormLabel>
+                <FormLabel className="text-sm">Endereço de e-mail</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="email" placeholder="johndoe@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,7 +70,7 @@ export function ConfirmStep() {
             name="obs"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Observações</FormLabel>
+                <FormLabel className="text-sm">Observações</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
@@ -79,8 +79,8 @@ export function ConfirmStep() {
             )}
           />
           <p id="form error"></p>
-          <div id="form actions" className="flex justify-end gap-4">
-            <Button type="button" variant="ghost">
+          <div id="form actions" className="flex justify-end gap-4 pt-1">
+            <Button type="button" variant="ghost" className="hover:bg-zinc-900">
               Cancelar
             </Button>
             <Button type="submit">Confirmar</Button>
