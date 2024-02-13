@@ -1,5 +1,6 @@
 import { ScheduleForm } from '@/components/forms/schedule/schedule-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getUserAvailability } from '@/lib/actions/availability';
 import { prisma } from '@/lib/prisma';
 
 interface ScheduleUserCalendarProps {
@@ -18,6 +19,13 @@ export async function generateStaticParams() {
 }
 
 export default async function ScheduleUserCalendarPage(props: ScheduleUserCalendarProps) {
+  const possibleHours = await getUserAvailability({
+    username: 'fabio-beutler',
+    date: new Date(),
+  });
+
+  console.log(possibleHours);
+
   const user = await prisma.user.findUnique({
     where: {
       username: props.params.username,
