@@ -19,13 +19,6 @@ export async function generateStaticParams() {
 }
 
 export default async function ScheduleUserCalendarPage(props: ScheduleUserCalendarProps) {
-  const possibleHours = await getUserAvailability({
-    username: 'fabio-beutler',
-    date: new Date(),
-  });
-
-  console.log(possibleHours);
-
   const user = await prisma.user.findUnique({
     where: {
       username: props.params.username,
@@ -45,7 +38,7 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
       .join('') || '';
 
   return (
-    <main className="mx-auto mb-4 mt-20 max-w-[852px] px-4">
+    <main className="mx-auto max-w-[852px] px-4 pb-4 pt-20">
       <header className="flex flex-col items-center">
         <Avatar className="size-20">
           <AvatarImage

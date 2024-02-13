@@ -77,8 +77,6 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
     return calendarWeeks;
   }, [currentDate]);
 
-  console.log(calendarWeeks);
-
   function handlePreviousMonth() {
     setCurrentDate(subMonths(currentDate, 1));
   }

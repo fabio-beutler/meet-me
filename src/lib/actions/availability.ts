@@ -1,6 +1,6 @@
 'use server';
 
-import { endOfDay, getDay, isBefore, startOfToday } from 'date-fns';
+import { endOfDay, getDay, isBefore, setHours, startOfToday } from 'date-fns';
 
 import { prisma } from '@/lib/prisma';
 
@@ -15,13 +15,13 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
   });
 
   if (!user) {
-    return { availability: [] };
+    return { error: 'User not found', availability: null };
   }
 
   const isPastDate = isBefore(endOfDay(params.date), startOfToday());
 
   if (isPastDate) {
-    return { availability: [] };
+    return { error: 'Date now allowed', availability: null };
   }
 
   const userAvailability = await prisma.userTimeInterval.findFirst({
@@ -32,7 +32,7 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
   });
 
   if (!userAvailability) {
-    return { availability: [] };
+    return { error: "User hasn't available times", availability: null };
   }
 
   const { time_start_in_minutes, time_end_in_minutes } = userAvailability;
@@ -40,9 +40,26 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
   const startHour = Math.floor(time_start_in_minutes / 60);
   const endHour = Math.floor(time_end_in_minutes / 60);
 
-  const possibleHours = Array.from({ length: endHour - startHour }).map((_, index) => {
+  const possibleTimes = Array.from({ length: endHour - startHour }).map((_, index) => {
     return startHour + index;
   });
 
-  return possibleHours;
+  const blockedTimes = await prisma.scheduling.findMany({
+    select: {
+      date: true,
+    },
+    where: {
+      user_id: user.id,
+      date: {
+        gte: setHours(params.date, startHour),
+        lte: setHours(params.date, endHour),
+      },
+    },
+  });
+
+  const availableTimes = possibleTimes.filter(
+    (time) => !blockedTimes.some((blockedTime) => blockedTime.date.getHours() === time),
+  );
+
+  return { error: null, availability: { possibleTimes, availableTimes } };
 }
