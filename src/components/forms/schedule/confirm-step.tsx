@@ -1,7 +1,9 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Calendar, Clock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
@@ -16,11 +18,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import { scheduleConfirmFormSchema } from '@/lib/validations/schedule';
 
 export function ConfirmStep() {
-  const form = useForm();
+  const form = useForm<z.infer<typeof scheduleConfirmFormSchema>>({
+    resolver: zodResolver(scheduleConfirmFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      observations: '',
+    },
+  });
 
-  function onSubmit(values: any) {
+  function onSubmit(values: z.infer<typeof scheduleConfirmFormSchema>) {
     console.log(values);
   }
 
@@ -41,12 +51,18 @@ export function ConfirmStep() {
           <Separator orientation="horizontal" className="bg-muted-foreground/15" />
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem className="pt-1">
                 <FormLabel className="text-sm">Seu nome</FormLabel>
                 <FormControl>
-                  <Input type="text" placeholder="John Doe" {...field} />
+                  <Input
+                    type="text"
+                    autoComplete="name"
+                    placeholder="John Doe"
+                    className="-ml-0.5"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -59,7 +75,13 @@ export function ConfirmStep() {
               <FormItem>
                 <FormLabel className="text-sm">Endereço de e-mail</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="johndoe@example.com" {...field} />
+                  <Input
+                    type="email"
+                    autoComplete="email"
+                    placeholder="johndoe@example.com"
+                    className="-ml-0.5"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -67,12 +89,12 @@ export function ConfirmStep() {
           />
           <FormField
             control={form.control}
-            name="obs"
+            name="observations"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm">Observações</FormLabel>
                 <FormControl>
-                  <Textarea {...field} />
+                  <Textarea className="-ml-0.5" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
