@@ -21,7 +21,7 @@ export function CalendarStep() {
     >
       <Calendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
-      {isDateSelected && <TimePicker />}
+      {isDateSelected && <TimePicker selectedDate={selectedDate} />}
     </Box>
   );
 }
