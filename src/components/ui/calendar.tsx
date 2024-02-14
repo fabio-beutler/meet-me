@@ -21,7 +21,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { getUserAvailability, getUserBlockedDates } from '@/lib/actions/availability';
+import { getUserBlockedDates } from '@/lib/actions/availability';
 import { cn } from '@/lib/utils';
 
 export type CalendarProps = React.ComponentProps<'div'> & {
@@ -44,25 +44,16 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
   const [currentDate, setCurrentDate] = useState(set(new Date(), { date: 1 }));
   const [blockedDays, setBlockedDays] = useState<number[] | null>(null);
 
-  useEffect(() => {
-    if (!selectedDate) return;
-    getUserBlockedDates({
-      username,
-      year: getYear(selectedDate),
-      month: getMonth(selectedDate),
-    })
-      .then((result) => {
-        if (result.error) {
-          toast.error('Não foi possível carregar os horários disponíveis');
-          return;
-        }
-        setBlockedDays(result.blockedWeekDays);
-      })
-      .catch((error) => console.error(error.message));
-  }, [selectedDate, username]);
-
   const currentMonth = format(currentDate, 'MMMM');
   const currentYear = format(currentDate, 'y');
+
+  function handlePreviousMonth() {
+    setCurrentDate(subMonths(currentDate, 1));
+  }
+
+  function handleNextMonth() {
+    setCurrentDate(addMonths(currentDate, 1));
+  }
 
   const calendarWeeks = useMemo(() => {
     const daysInMonthArray = Array.from({ length: getDaysInMonth(currentDate) }).map(
@@ -81,7 +72,9 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       ...previousMonthFillArray.map((date) => ({ date, disabled: true })),
       ...daysInMonthArray.map((date) => ({
         date,
-        disabled: isBefore(endOfDay(date), new Date()),
+        disabled:
+          isBefore(endOfDay(date), new Date()) ||
+          (blockedDays !== null && blockedDays.includes(getDay(date))),
       })),
       ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
     ];
@@ -100,15 +93,24 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       [],
     );
     return calendarWeeks;
-  }, [currentDate]);
+  }, [currentDate, blockedDays]);
 
-  function handlePreviousMonth() {
-    setCurrentDate(subMonths(currentDate, 1));
-  }
-
-  function handleNextMonth() {
-    setCurrentDate(addMonths(currentDate, 1));
-  }
+  useEffect(() => {
+    if (!currentDate) return;
+    getUserBlockedDates({
+      username,
+      year: getYear(currentDate),
+      month: getMonth(currentDate),
+    })
+      .then((result) => {
+        if (result.error) {
+          toast.error('Não foi possível carregar os horários disponíveis');
+          return;
+        }
+        setBlockedDays(result.blockedWeekDays);
+      })
+      .catch((error) => console.error(error.message));
+  }, [username, currentDate]);
 
   return (
     <div className={cn('flex flex-col gap-6 p-6', className)} {...props}>
@@ -153,7 +155,7 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
               {days.map((day) => (
                 <td key={day.date.toString()} className="relative">
                   <button
-                    disabled={day.disabled || blockedDays?.includes(getDay(day.date))}
+                    disabled={day.disabled}
                     onClick={() => onSelectDate(day.date)}
                     className={cn(
                       'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900',
