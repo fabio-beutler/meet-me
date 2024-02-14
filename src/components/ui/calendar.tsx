@@ -8,14 +8,20 @@ import {
   getDate,
   getDay,
   getDaysInMonth,
+  getMonth,
+  getYear,
   isBefore,
+  isToday,
   set,
   subDays,
   subMonths,
 } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import * as React from 'react';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
+import { getUserAvailability, getUserBlockedDates } from '@/lib/actions/availability';
 import { cn } from '@/lib/utils';
 
 export type CalendarProps = React.ComponentProps<'div'> & {
@@ -34,12 +40,31 @@ type CalendarWeek = {
 type CalendarWeeks = Array<CalendarWeek>;
 
 function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarProps) {
-  const [currentDate, setCurrentDate] = React.useState(set(new Date(), { date: 1 }));
+  const { username } = useParams<{ username: string }>();
+  const [currentDate, setCurrentDate] = useState(set(new Date(), { date: 1 }));
+  const [blockedDays, setBlockedDays] = useState<number[] | null>(null);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+    getUserBlockedDates({
+      username,
+      year: getYear(selectedDate),
+      month: getMonth(selectedDate),
+    })
+      .then((result) => {
+        if (result.error) {
+          toast.error('Não foi possível carregar os horários disponíveis');
+          return;
+        }
+        setBlockedDays(result.blockedWeekDays);
+      })
+      .catch((error) => console.error(error.message));
+  }, [selectedDate, username]);
 
   const currentMonth = format(currentDate, 'MMMM');
   const currentYear = format(currentDate, 'y');
 
-  const calendarWeeks = React.useMemo(() => {
+  const calendarWeeks = useMemo(() => {
     const daysInMonthArray = Array.from({ length: getDaysInMonth(currentDate) }).map(
       (_, index) => set(currentDate, { date: index + 1 }),
     );
@@ -126,11 +151,18 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
           {calendarWeeks.map(({ week, days }, index) => (
             <tr key={`${week}-${index}`}>
               {days.map((day) => (
-                <td key={day.date.toString()}>
+                <td key={day.date.toString()} className="relative">
                   <button
-                    disabled={day.disabled}
+                    disabled={day.disabled || blockedDays?.includes(getDay(day.date))}
                     onClick={() => onSelectDate(day.date)}
-                    className="aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900"
+                    className={cn(
+                      'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900',
+                      {
+                        'after:absolute after:bottom-3 after:left-1/2 after:size-1.5 after:-translate-x-1/2 after:rounded-full after:bg-white':
+                          isToday(day.date),
+                        'ring-2 ring-white': selectedDate === day.date,
+                      },
+                    )}
                   >
                     {getDate(day.date)}
                   </button>
@@ -143,6 +175,5 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
     </div>
   );
 }
-Calendar.displayName = 'Calendar';
 
 export { Calendar };

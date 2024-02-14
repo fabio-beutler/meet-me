@@ -9,6 +9,12 @@ type GetUserAvailabilityParams = {
   date: Date;
 };
 
+type GetUserBlockedDatesParams = {
+  username: string;
+  year: number;
+  month: number;
+};
+
 export async function getUserAvailability(params: GetUserAvailabilityParams) {
   const user = await prisma.user.findUnique({
     where: { username: params.username },
@@ -62,4 +68,32 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
   );
 
   return { error: null, availability: { possibleTimes, availableTimes } };
+}
+
+export async function getUserBlockedDates(params: GetUserBlockedDatesParams) {
+  const user = await prisma.user.findUnique({
+    where: { username: params.username },
+  });
+
+  if (!user) {
+    return { error: 'User not found', blockedWeekDays: null };
+  }
+
+  const availableWeekDays = await prisma.userTimeInterval.findMany({
+    select: {
+      week_day: true,
+    },
+    where: {
+      user_id: user.id,
+    },
+  });
+
+  const blockedWeekDays = [0, 1, 2, 3, 4, 5, 6].filter(
+    (weekDay) =>
+      !availableWeekDays.some(
+        (availableWeekDay) => availableWeekDay.week_day === weekDay,
+      ),
+  );
+
+  return { error: null, blockedWeekDays: blockedWeekDays };
 }
