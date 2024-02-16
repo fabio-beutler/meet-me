@@ -40,10 +40,15 @@ type CalendarWeek = {
 
 type CalendarWeeks = Array<CalendarWeek>;
 
+interface BlockedDates {
+  blockedWeekDays: number[];
+  blockedDates: number[];
+}
+
 function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarProps) {
   const { username } = useParams<{ username: string }>();
   const [currentDate, setCurrentDate] = useState(set(new Date(), { date: 1 }));
-  const [blockedDays, setBlockedDays] = useState<number[] | null>(null);
+  const [blockedDates, setBlockedDates] = useState<BlockedDates | null>(null);
   const [isLoadingCalendar, setIsLoadingCalendar] = useState(true);
 
   const currentMonth = format(currentDate, 'MMMM');
@@ -58,7 +63,7 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
   }
 
   const calendarWeeks = useMemo(() => {
-    if (blockedDays === null) return [];
+    if (blockedDates === null) return [];
 
     const daysInMonthArray = Array.from({ length: getDaysInMonth(currentDate) }).map(
       (_, index) => set(currentDate, { date: index + 1 }),
@@ -81,7 +86,9 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       ...daysInMonthArray.map((date) => ({
         date,
         disabled:
-          isBefore(endOfDay(date), new Date()) || blockedDays.includes(getDay(date)),
+          isBefore(endOfDay(date), new Date()) ||
+          blockedDates.blockedWeekDays.includes(getDay(date)) ||
+          blockedDates.blockedDates.includes(getDate(date)),
         currentMonth: true,
       })),
       ...nextMonthFillArray.map((date) => ({
@@ -102,21 +109,21 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       }
       return weeks;
     }, []);
-  }, [currentDate, blockedDays]);
+  }, [currentDate, blockedDates]);
 
   useEffect(() => {
     if (!currentDate) return;
     getUserBlockedDates({
       username,
       year: getYear(currentDate),
-      month: getMonth(currentDate),
+      month: getMonth(currentDate) + 1,
     })
       .then((result) => {
         if (result.error) {
           toast.error('Não foi possível carregar os horários disponíveis');
           return;
         }
-        setBlockedDays(result.blockedWeekDays);
+        setBlockedDates(result.blockedWeekDays);
       })
       .catch((error) => console.error(error.message));
   }, [username, currentDate]);
