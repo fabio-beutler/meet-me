@@ -2,6 +2,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Roboto_Flex } from 'next/font/google';
+import React from 'react';
 
 import { Providers } from '@/app/providers';
 import { Toaster } from '@/components/ui/sonner';
