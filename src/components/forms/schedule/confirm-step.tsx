@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { Calendar, Clock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -20,7 +21,12 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { scheduleConfirmFormSchema } from '@/lib/validations/schedule';
 
-export function ConfirmStep() {
+interface ConfirmStepProps {
+  schedulingDate: Date;
+  onCancelConfirmation: () => void;
+}
+
+export function ConfirmStep(props: ConfirmStepProps) {
   const form = useForm<z.infer<typeof scheduleConfirmFormSchema>>({
     resolver: zodResolver(scheduleConfirmFormSchema),
     defaultValues: {
@@ -40,12 +46,12 @@ export function ConfirmStep() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div id="form header" className="flex items-center gap-4 pb-2 pt-1">
             <h2 className="flex items-center gap-2">
-              <Calendar className="size-4 text-gray-300" />
-              22 de Setembro de 2022
+              <Calendar className="size-4  text-gray-300" />
+              {format(props.schedulingDate, "dd 'de' MMMM 'de' yyyy")}
             </h2>
             <h2 className="flex items-center gap-2">
               <Clock className="size-4 text-gray-300" calcMode={20} />
-              18:00h
+              {format(props.schedulingDate, "HH:mm'h'")}
             </h2>
           </div>
           <Separator orientation="horizontal" className="bg-muted-foreground/15" />
@@ -102,7 +108,12 @@ export function ConfirmStep() {
           />
           <p id="form error"></p>
           <div id="form actions" className="flex justify-end gap-4 pt-1">
-            <Button type="button" variant="ghost" className="hover:bg-zinc-900">
+            <Button
+              onClick={props.onCancelConfirmation}
+              type="button"
+              variant="ghost"
+              className="hover:bg-zinc-900"
+            >
               Cancelar
             </Button>
             <Button type="submit">Confirmar</Button>

@@ -9,6 +9,7 @@ import { getUserAvailability } from '@/lib/actions/availability';
 
 interface TimePickerProps {
   selectedDate: Date | null;
+  onSelectTime: (hour: number) => void;
 }
 
 interface Availability {
@@ -20,6 +21,9 @@ export function TimePicker(props: TimePickerProps) {
   const id = useId();
   const { username } = useParams<{ username: string }>();
   const [availability, setAvailability] = useState<Availability | null>(null);
+
+  const weekDay = props.selectedDate ? format(props.selectedDate, 'EEEE') : null;
+  const month = props.selectedDate ? format(props.selectedDate, "dd 'de' MMMM") : null;
 
   useEffect(() => {
     if (!props.selectedDate) return;
@@ -37,9 +41,6 @@ export function TimePicker(props: TimePickerProps) {
       .catch((error) => console.error(error.message));
   }, [props.selectedDate, username]);
 
-  const weekDay = props.selectedDate ? format(props.selectedDate, 'EEEE') : null;
-  const month = props.selectedDate ? format(props.selectedDate, "dd 'de' MMMM") : null;
-
   return (
     <div className="border-l-1 absolute bottom-0 right-0 top-0 w-[280px] overflow-y-scroll border-zinc-600 px-6 pt-6">
       <p className="font-medium">
@@ -49,6 +50,7 @@ export function TimePicker(props: TimePickerProps) {
         {availability?.possibleTimes.map((hour) => (
           <button
             key={`${hour}-${id}`}
+            onClick={() => props.onSelectTime(hour)}
             disabled={!availability.availableTimes.includes(hour)}
             className="rounded-sm bg-zinc-600 py-2 text-sm leading-relaxed text-zinc-100 ring-zinc-100 last:mb-6 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 disabled:hover:bg-zinc-900"
           >
