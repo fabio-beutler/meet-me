@@ -3,7 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { Calendar, Clock } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Box } from '@/components/ui/box';
@@ -19,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import { createSchedule } from '@/lib/actions/schedule';
 import { scheduleConfirmFormSchema } from '@/lib/validations/schedule';
 
 interface ConfirmStepProps {
@@ -27,6 +30,9 @@ interface ConfirmStepProps {
 }
 
 export function ConfirmStep(props: ConfirmStepProps) {
+  const params = useParams<{ username: string }>();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof scheduleConfirmFormSchema>>({
     resolver: zodResolver(scheduleConfirmFormSchema),
     defaultValues: {
@@ -36,8 +42,17 @@ export function ConfirmStep(props: ConfirmStepProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof scheduleConfirmFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof scheduleConfirmFormSchema>) {
+    try {
+      await createSchedule(params.username, {
+        ...values,
+        date: props.schedulingDate,
+      });
+      toast.success('Agendamento realizado com sucesso');
+      router.push(`/schedule/${params.username}`);
+    } catch (e: any) {
+      toast.error(e.message);
+    }
   }
 
   return (
