@@ -34,6 +34,7 @@ type CalendarWeek = {
   days: Array<{
     date: Date;
     disabled: boolean;
+    currentMonth: boolean;
   }>;
 };
 
@@ -72,13 +73,22 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       addDays(lastDayInCurrentMonth, index + 1),
     );
     const calendarDays = [
-      ...previousMonthFillArray.map((date) => ({ date, disabled: true })),
+      ...previousMonthFillArray.map((date) => ({
+        date,
+        disabled: true,
+        currentMonth: false,
+      })),
       ...daysInMonthArray.map((date) => ({
         date,
         disabled:
           isBefore(endOfDay(date), new Date()) || blockedDays.includes(getDay(date)),
+        currentMonth: true,
       })),
-      ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
+      ...nextMonthFillArray.map((date) => ({
+        date,
+        disabled: true,
+        currentMonth: false,
+      })),
     ];
     setIsLoadingCalendar(false);
     return calendarDays.reduce<CalendarWeeks>((weeks, _, index, original) => {
@@ -162,9 +172,10 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
                 <td key={day.date.toString()} className="relative">
                   <button
                     disabled={day.disabled}
+                    data-currentMonth={day.currentMonth}
                     onClick={() => onSelectDate(day.date)}
                     className={cn(
-                      'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900',
+                      'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900 data-[currentMonth=false]:bg-transparent',
                       {
                         'after:absolute after:bottom-3 after:left-1/2 after:size-1.5 after:-translate-x-1/2 after:rounded-full after:bg-white':
                           isToday(day.date),
