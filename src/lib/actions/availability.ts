@@ -78,7 +78,7 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
       (blockedTime) => blockedTime.date.getHours() === time,
     );
     const isTimeInPast = isBefore(set(params.date, { hours: time }), new Date());
-    return !isTimeBlocked && !isTimeInPast;
+    return !isTimeBlocked || !isTimeInPast;
   });
 
   return { error: null, availability: { possibleTimes, availableTimes } };

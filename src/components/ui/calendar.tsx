@@ -179,10 +179,10 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
                 <td key={day.date.toString()} className="relative">
                   <button
                     disabled={day.disabled}
-                    data-currentMonth={day.currentMonth}
+                    data-currentmonth={day.currentMonth}
                     onClick={() => onSelectDate(day.date)}
                     className={cn(
-                      'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900 data-[currentMonth=false]:bg-transparent',
+                      'aspect-square w-full rounded-sm bg-zinc-600 text-center ring-zinc-100 hover:bg-zinc-500 focus:ring-2 disabled:cursor-default disabled:bg-zinc-900 disabled:opacity-40 hover:disabled:bg-zinc-900 data-[currentmonth=false]:bg-transparent',
                       {
                         'after:absolute after:bottom-3 after:left-1/2 after:size-1.5 after:-translate-x-1/2 after:rounded-full after:bg-white':
                           isToday(day.date),
