@@ -1,6 +1,7 @@
+import { notFound } from 'next/navigation';
+
 import { ScheduleForm } from '@/components/forms/schedule/schedule-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getUserAvailability } from '@/lib/actions/availability';
 import { prisma } from '@/lib/prisma';
 
 interface ScheduleUserCalendarProps {
@@ -26,9 +27,7 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
   });
 
   if (!user) {
-    return {
-      notFound: true,
-    };
+    return notFound();
   }
 
   const userInitials =
@@ -42,9 +41,12 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
       <header className="flex flex-col items-center">
         <Avatar className="size-20">
           <AvatarImage
-            src={user.avatar_url ?? ''}
+            src={
+              'https://lh3.googleusercontent.com/a/ACg8ocJvO7ojkuvOqs3gHZfsOGYJ2czwOy235dIAsq29TAMobA=s96-c'
+            }
             alt={`Foto de perfil de ${user.name}`}
           />
+
           <AvatarFallback className="bg-primary-foreground text-2xl">
             {userInitials}
           </AvatarFallback>
