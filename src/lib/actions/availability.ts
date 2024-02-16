@@ -1,6 +1,6 @@
 'use server';
 
-import { endOfDay, getDay, isBefore, setHours, startOfToday } from 'date-fns';
+import { endOfDay, getDay, isBefore, set, startOfToday } from 'date-fns';
 
 import { prisma } from '@/lib/prisma';
 
@@ -43,8 +43,8 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
 
   const { time_start_in_minutes, time_end_in_minutes } = userAvailability;
 
-  const startHour = Math.floor(time_start_in_minutes / 60);
-  const endHour = Math.floor(time_end_in_minutes / 60);
+  const startHour = time_start_in_minutes / 60;
+  const endHour = time_end_in_minutes / 60;
 
   const possibleTimes = Array.from({ length: endHour - startHour }).map((_, index) => {
     return startHour + index;
@@ -57,8 +57,18 @@ export async function getUserAvailability(params: GetUserAvailabilityParams) {
     where: {
       user_id: user.id,
       date: {
-        gte: setHours(params.date, startHour),
-        lte: setHours(params.date, endHour),
+        gte: set(params.date, {
+          hours: startHour,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        }),
+        lte: set(params.date, {
+          hours: endHour,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        }),
       },
     },
   });
@@ -95,5 +105,30 @@ export async function getUserBlockedDates(params: GetUserBlockedDatesParams) {
       ),
   );
 
-  return { error: null, blockedWeekDays: blockedWeekDays };
+  const blockedDaysRaw = await prisma.$queryRaw<
+    Array<{
+      date: number;
+    }>
+  >`
+  SELECT
+    EXTRACT(DAY FROM S.date) AS date,
+    COUNT(S.date) AS amount,
+    ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60) AS size
+
+  FROM schedulings S
+
+  LEFT JOIN user_time_intervals UTI
+    ON UTI.week_day = WEEKDAY(DATE_ADD(S.date, INTERVAL 1 DAY))
+
+  WHERE S.user_id = ${user.id}
+    AND DATE_FORMAT(S.date, "%Y-%m") = ${`${params.year}-${params.month.toString().padStart(2, '0')}`}
+
+  GROUP BY EXTRACT(DAY FROM S.date),
+    ((UTI.time_end_in_minutes - UTI.time_start_in_minutes) / 60)
+
+  HAVING amount >= size
+  `;
+
+  const blockedDates = blockedDaysRaw.map((blockedDay) => Number(blockedDay.date));
+  return { error: null, blockedWeekDays: { blockedWeekDays, blockedDates } };
 }
