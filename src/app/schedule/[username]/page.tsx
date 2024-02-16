@@ -41,9 +41,7 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
       <header className="flex flex-col items-center">
         <Avatar className="size-20">
           <AvatarImage
-            src={
-              'https://lh3.googleusercontent.com/a/ACg8ocJvO7ojkuvOqs3gHZfsOGYJ2czwOy235dIAsq29TAMobA=s96-c'
-            }
+            src={user.avatar_url ?? undefined}
             alt={`Foto de perfil de ${user.name}`}
           />
 
