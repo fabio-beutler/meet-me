@@ -79,7 +79,7 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       })),
       ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
     ];
-    return calendarDays.reduce<CalendarWeeks>((weeks, date, index, original) => {
+    return calendarDays.reduce<CalendarWeeks>((weeks, _, index, original) => {
       const isNewWeek = index % 7 === 0;
 
       if (isNewWeek) {
