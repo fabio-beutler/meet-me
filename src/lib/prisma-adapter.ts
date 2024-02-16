@@ -115,7 +115,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         emailVerified: null,
       };
     },
-    async deleteUser(userId) {
+    async deleteUser() {
       return;
     },
     async linkAccount(account) {
@@ -136,7 +136,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
       });
       return;
     },
-    async unlinkAccount({ providerAccountId, provider }) {
+    async unlinkAccount() {
       return;
     },
     async createSession({ sessionToken, userId, expires }) {
@@ -205,10 +205,10 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
       });
       return;
     },
-    async createVerificationToken({ identifier, expires, token }) {
+    async createVerificationToken() {
       return null;
     },
-    async useVerificationToken({ identifier, token }) {
+    async useVerificationToken() {
       return null;
     },
   };
