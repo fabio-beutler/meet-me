@@ -16,7 +16,7 @@ import {
   subDays,
   subMonths,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { ComponentProps, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -43,6 +43,7 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
   const { username } = useParams<{ username: string }>();
   const [currentDate, setCurrentDate] = useState(set(new Date(), { date: 1 }));
   const [blockedDays, setBlockedDays] = useState<number[] | null>(null);
+  const [isLoadingCalendar, setIsLoadingCalendar] = useState(true);
 
   const currentMonth = format(currentDate, 'MMMM');
   const currentYear = format(currentDate, 'y');
@@ -79,6 +80,7 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       })),
       ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
     ];
+    setIsLoadingCalendar(false);
     return calendarDays.reduce<CalendarWeeks>((weeks, _, index, original) => {
       const isNewWeek = index % 7 === 0;
 
@@ -108,6 +110,13 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       })
       .catch((error) => console.error(error.message));
   }, [username, currentDate]);
+
+  if (isLoadingCalendar)
+    return (
+      <div className="flex flex-col items-center justify-center p-10">
+        <Loader2 className="size-16 animate-spin text-muted-foreground" />
+      </div>
+    );
 
   return (
     <div className={cn('flex flex-col gap-6 p-6', className)} {...props}>
