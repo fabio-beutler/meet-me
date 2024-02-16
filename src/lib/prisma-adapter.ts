@@ -26,6 +26,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
 
       return {
         id: updatedUser.id,
+        bio: updatedUser.bio ?? '',
         name: updatedUser.name,
         username: updatedUser.username,
         email: updatedUser.email!,
@@ -42,6 +43,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
 
       return {
         id: user.id,
+        bio: user.bio ?? '',
         name: user.name,
         username: user.username,
         email: user.email!,
@@ -58,6 +60,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
 
       return {
         id: user.id,
+        bio: user.bio ?? '',
         name: user.name,
         username: user.username,
         email: user.email!,
@@ -84,6 +87,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
 
       return {
         id: user.id,
+        bio: user.bio ?? '',
         name: user.name,
         username: user.username,
         email: user.email!,
@@ -103,6 +107,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
 
       return {
         id: updatedUser.id,
+        bio: updatedUser.bio ?? '',
         name: updatedUser.name,
         username: updatedUser.username,
         email: updatedUser.email!,
@@ -168,6 +173,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
         },
         user: {
           id: user.id,
+          bio: user.bio ?? '',
           name: user.name,
           username: user.username,
           email: user.email!,
