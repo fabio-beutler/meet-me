@@ -18,13 +18,13 @@ import {
 } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { ComponentProps, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { getUserBlockedDates } from '@/lib/actions/availability';
 import { cn } from '@/lib/utils';
 
-export type CalendarProps = React.ComponentProps<'div'> & {
+export type CalendarProps = ComponentProps<'div'> & {
   selectedDate: Date | null;
   onSelectDate: (date: Date) => void;
 };
@@ -56,6 +56,8 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
   }
 
   const calendarWeeks = useMemo(() => {
+    if (blockedDays === null) return [];
+
     const daysInMonthArray = Array.from({ length: getDaysInMonth(currentDate) }).map(
       (_, index) => set(currentDate, { date: index + 1 }),
     );
@@ -73,26 +75,21 @@ function Calendar({ className, selectedDate, onSelectDate, ...props }: CalendarP
       ...daysInMonthArray.map((date) => ({
         date,
         disabled:
-          isBefore(endOfDay(date), new Date()) ||
-          (blockedDays !== null && blockedDays.includes(getDay(date))),
+          isBefore(endOfDay(date), new Date()) || blockedDays.includes(getDay(date)),
       })),
       ...nextMonthFillArray.map((date) => ({ date, disabled: true })),
     ];
-    const calendarWeeks = calendarDays.reduce<CalendarWeeks>(
-      (weeks, date, index, original) => {
-        const isNewWeek = index % 7 === 0;
+    return calendarDays.reduce<CalendarWeeks>((weeks, date, index, original) => {
+      const isNewWeek = index % 7 === 0;
 
-        if (isNewWeek) {
-          weeks.push({
-            week: index / 7 + 1,
-            days: original.slice(index, index + 7),
-          });
-        }
-        return weeks;
-      },
-      [],
-    );
-    return calendarWeeks;
+      if (isNewWeek) {
+        weeks.push({
+          week: index / 7 + 1,
+          days: original.slice(index, index + 7),
+        });
+      }
+      return weeks;
+    }, []);
   }, [currentDate, blockedDays]);
 
   useEffect(() => {
