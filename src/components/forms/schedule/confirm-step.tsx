@@ -49,7 +49,7 @@ export function ConfirmStep(props: ConfirmStepProps) {
         date: props.schedulingDate,
       });
       toast.success('Agendamento realizado com sucesso');
-      router.push(`/schedule/${params.username}`);
+      props.onCancelConfirmation();
     } catch (e: any) {
       toast.error(e.message);
     }
