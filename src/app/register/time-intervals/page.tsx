@@ -1,5 +1,15 @@
+import { Metadata } from 'next';
+
 import { TimeIntervalsForm } from '@/components/forms/register-form/time-intervals-form';
 import { MultiStep } from '@/components/ui/multi-step';
+
+export const metadata: Metadata = {
+  title: 'Selecione sua disponibilidade | Meet Me',
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function TimeIntervalsPage() {
   return (

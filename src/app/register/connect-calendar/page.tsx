@@ -1,5 +1,15 @@
+import { Metadata } from 'next';
+
 import { ConnectGoogleBox } from '@/components/auth/connect-google-box';
 import { MultiStep } from '@/components/ui/multi-step';
+
+export const metadata: Metadata = {
+  title: 'Conecte sua agenda do Google | Meet Me',
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function ConnectCalendarPage() {
   return (

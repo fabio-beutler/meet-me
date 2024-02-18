@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ScheduleForm } from '@/components/forms/schedule/schedule-form';
@@ -10,13 +11,16 @@ interface ScheduleUserCalendarProps {
   };
 }
 
-export async function generateStaticParams() {
-  const users = await prisma.user.findMany({
-    take: 5,
-  });
-  return users.map((user) => ({
-    username: user.username,
-  }));
+export async function generateMetadata({
+  params,
+}: ScheduleUserCalendarProps): Promise<Metadata> {
+  const user = await prisma.user.findUnique({ where: { username: params.username } });
+  if (!user) {
+    return notFound();
+  }
+  return {
+    title: `Agendar com ${user.name} | Meet Me`,
+  };
 }
 
 export default async function ScheduleUserCalendarPage(props: ScheduleUserCalendarProps) {

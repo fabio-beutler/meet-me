@@ -12,7 +12,14 @@ const roboto = Roboto_Flex({ subsets: ['latin'], variable: '--roboto' });
 
 export const metadata: Metadata = {
   title: 'Meet Me',
-  description: 'An application to schedule meetings with your customers.',
+  description:
+    'Conecte seu calendário e permita que as pessoas marquem agendamentos no seu tempo livre',
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: 'https://meetme.vercel.app',
+    siteName: 'Meet Me',
+  },
 };
 
 export default function RootLayout({
