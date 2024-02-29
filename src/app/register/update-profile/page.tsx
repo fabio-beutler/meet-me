@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { UpdateProfileForm } from '@/components/forms/register-form/update-profile-form';
 import { MultiStep } from '@/components/ui/multi-step';
+import { authOptions } from '@/lib/next-auth';
 
 export const metadata: Metadata = {
   title: 'Atualize seu perfil | Meet Me',
