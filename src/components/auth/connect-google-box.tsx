@@ -2,7 +2,6 @@
 
 import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 import { Box } from '@/components/ui/box';
@@ -10,8 +9,6 @@ import { Button } from '@/components/ui/button';
 
 export function ConnectGoogleBox() {
   const session = useSession();
-  const searchParams = useSearchParams();
-  const hasAuthError = searchParams.get('error') === 'permissions';
   const isSignedIn = session.status === 'authenticated';
 
   return (
@@ -42,12 +39,7 @@ export function ConnectGoogleBox() {
           </Button>
         )}
       </div>
-      {hasAuthError && (
-        <p className="text-sm text-red-400">
-          Falha ao se conectar ao Google, verifique se você habilitou as permissão de
-          acesso ao Google Calendar
-        </p>
-      )}
+
       <Button asChild className="w-full" disabled={!isSignedIn}>
         <Link href="/register/time-intervals">
           Próximo passo
