@@ -16,7 +16,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           id: userIdOnCookies.value,
         },
         data: {
-          name: user.name,
+          name: user.name ?? '',
           email: user.email,
           avatar_url: user.avatar_url,
         },
@@ -99,7 +99,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
       const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: {
-          name: user.name,
+          name: user.name ?? '',
           email: user.email,
           avatar_url: user.avatar_url,
         },
@@ -131,7 +131,7 @@ export function PrismaAdapter(prisma: PrismaClient): Adapter {
           token_type: account.token_type,
           scope: account.scope,
           id_token: account.id_token,
-          session_state: account.session_state,
+          session_state: account.session_state as string,
         },
       });
       return;
