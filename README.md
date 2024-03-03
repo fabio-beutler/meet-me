@@ -47,7 +47,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] List available appointments
 - [x] Add appointment to google calendar
 - [x] Use Next-Auth beta
-- [ ] Add theme switcher
+- [x] Add theme switcher
 - [x] Use Next-Auth provided Prisma adapter
 - [ ] Add custom time picker
 - [ ] Add edit profile feature

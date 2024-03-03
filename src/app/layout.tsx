@@ -5,6 +5,7 @@ import { Roboto_Flex } from 'next/font/google';
 import React from 'react';
 
 import { Providers } from '@/app/providers';
+import { ThemeSwitcherButton } from '@/components/theme-switcher-button';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
@@ -28,15 +29,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="dark" lang="pt-BR">
+    <html lang="pt-BR">
       <body
         className={cn(
           'min-h-screen bg-background font-sans text-foreground antialiased',
           roboto.variable,
         )}
       >
-        <Providers>{children}</Providers>
-        <Toaster richColors />
+        <Providers>
+          {children}
+          <Toaster richColors />
+          <ThemeSwitcherButton className="fixed right-4 top-4" />
+        </Providers>
       </body>
     </html>
   );
