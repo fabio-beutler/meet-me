@@ -7,8 +7,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import {
@@ -65,92 +65,100 @@ export function TimeIntervalsForm() {
 
   return (
     <Form {...form}>
-      <Box asChild className="flex flex-col gap-4">
+      <Card>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="divide-y divide-muted-foreground/20 rounded-md border border-muted-foreground/20">
-            {fields.map((arrayField, index) => (
-              <div
-                key={arrayField.id}
-                className="flex items-center justify-between px-4 py-3"
-              >
-                <FormField
-                  control={form.control}
-                  name={`intervals.${index}.enabled`}
-                  render={({ field: { value, onChange, ...field } }) => (
-                    <FormItem>
-                      <div className="flex items-center gap-3">
-                        <FormControl>
-                          <Checkbox
-                            {...field}
-                            checked={value}
-                            onCheckedChange={(value) => onChange(value)}
-                            title={`Habilitar intervalo de horário para ${WeekDay[arrayField.weekDay]}`}
-                          />
-                        </FormControl>
-                        <FormLabel>{WeekDay[arrayField.weekDay]}</FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <div className="flex items-center gap-2">
+          <CardContent className="pt-6">
+            <div className="divide-y divide-muted-foreground/20 rounded-md border border-muted-foreground/20">
+              {fields.map((arrayField, index) => (
+                <div
+                  key={arrayField.id}
+                  className="flex items-center justify-between px-4 py-3"
+                >
                   <FormField
                     control={form.control}
-                    name={`intervals.${index}.startTime`}
+                    name={`intervals.${index}.enabled`}
                     render={({ field: { value, onChange, ...field } }) => (
-                      <Select
-                        defaultValue="08:00"
-                        disabled={!watchingIntervals[index].enabled}
-                        onValueChange={onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a fruit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeIntervalsSelector.map((time) => (
-                            <SelectItem key={time} value={time} showIndicator={false}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormItem>
+                        <div className="flex items-center gap-3">
+                          <FormControl>
+                            <Checkbox
+                              {...field}
+                              checked={value}
+                              onCheckedChange={(value) => onChange(value)}
+                              title={`Habilitar intervalo de horário para ${WeekDay[arrayField.weekDay]}`}
+                            />
+                          </FormControl>
+                          <FormLabel>{WeekDay[arrayField.weekDay]}</FormLabel>
+                        </div>
+                      </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name={`intervals.${index}.endTime`}
-                    render={({ field: { value, onChange, ...field } }) => (
-                      <Select
-                        defaultValue="08:00"
-                        disabled={!watchingIntervals[index].enabled}
-                        onValueChange={onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a fruit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeIntervalsSelector.map((time) => (
-                            <SelectItem key={time} value={time} showIndicator={false}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
+                  <div className="flex items-center gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`intervals.${index}.startTime`}
+                      render={({ field: { value, onChange, ...field } }) => (
+                        <Select
+                          defaultValue="08:00"
+                          disabled={!watchingIntervals[index].enabled}
+                          onValueChange={onChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="08:00" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeIntervalsSelector.map((time) => (
+                              <SelectItem key={time} value={time} showIndicator={false}>
+                                {time}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`intervals.${index}.endTime`}
+                      render={({ field: { value, onChange, ...field } }) => (
+                        <Select
+                          defaultValue="08:00"
+                          disabled={!watchingIntervals[index].enabled}
+                          onValueChange={onChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="08:00" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeIntervalsSelector.map((time) => (
+                              <SelectItem key={time} value={time} showIndicator={false}>
+                                {time}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          {form.formState.errors.intervals && (
-            <p className="text-destructive brightness-150">
-              {form.formState.errors?.intervals.root?.message}
-            </p>
-          )}
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            Próximo passo <ArrowRight className="ml-2 size-4" />
-          </Button>
+              ))}
+            </div>
+            {form.formState.errors.intervals && (
+              <p className="text-destructive brightness-150">
+                {form.formState.errors?.intervals.root?.message}
+              </p>
+            )}
+          </CardContent>
+          <CardFooter>
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="w-full"
+            >
+              Próximo passo <ArrowRight className="ml-2 size-4" />
+            </Button>
+          </CardFooter>
         </form>
-      </Box>
+      </Card>
     </Form>
   );
 }
