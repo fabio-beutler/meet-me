@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 import { UpdateProfileForm } from '@/components/forms/register-form/update-profile-form';
 import { MultiStep } from '@/components/ui/multi-step';
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
 export default async function UpdateProfilePage() {
   const session = await auth();
 
+  if (!session) {
+    return redirect('/');
+  }
+
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
       <header className="px-6">
@@ -26,7 +31,7 @@ export default async function UpdateProfilePage() {
       </header>
 
       <div className="mt-6 ">
-        <UpdateProfileForm session={session} />
+        <UpdateProfileForm session={session} isInRegister />
       </div>
     </main>
   );

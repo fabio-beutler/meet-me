@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { BgGrid } from '@/assets/bg-grid';
 import calendarImg from '@/assets/calendar-bg.png';
-import { ConnectWithGoogle } from '@/components/auth/connect-with-google';
+import { ConnectWithGoogleForm } from '@/components/forms/register-form/connect-with-google-form';
 import { auth } from '@/lib/auth';
 
 export default async function Home() {
@@ -31,7 +31,7 @@ export default async function Home() {
           tempo livre.
         </p>
         <div className="mt-6">
-          <ConnectWithGoogle />
+          <ConnectWithGoogleForm />
         </div>
         <BgGrid className="fixed left-[max(0px,calc(100vw-1160px)/2)] top-1/2 -z-10 -translate-y-1/2" />
       </div>

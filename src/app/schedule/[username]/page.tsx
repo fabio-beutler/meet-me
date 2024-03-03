@@ -36,7 +36,7 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
 
   const userInitials =
     user.name
-      .split(' ')
+      ?.split(' ')
       .map((word) => word[0])
       .join('') || '';
 

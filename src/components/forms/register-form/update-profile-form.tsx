@@ -1,8 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight, Loader2 } from 'lucide-react';
-import { redirect, useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import { Session } from 'next-auth';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -26,18 +26,16 @@ import { updateUser } from '@/lib/actions/user';
 import { updateProfileSchema } from '@/lib/validations/user';
 
 interface UpdateProfileFormProps {
-  session: Session | null;
+  session: Session;
+  isInRegister?: boolean;
 }
 
-export function UpdateProfileForm(props: UpdateProfileFormProps) {
-  const router = useRouter();
-
-  if (!props.session) {
-    redirect('/');
-  }
-
+export function UpdateProfileForm({
+  session,
+  isInRegister = false,
+}: UpdateProfileFormProps) {
   const userInitials =
-    props.session.user.name
+    session.user.name
       ?.split(' ')
       .map((word) => word[0])
       .join('') || '';
@@ -45,9 +43,9 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      name: props.session.user.name ?? '',
-      username: props.session.user.username ?? '',
-      bio: props.session.user.bio ?? '',
+      name: session.user.name ?? '',
+      username: session.user.username ?? '',
+      bio: session.user.bio ?? '',
     },
   });
 
@@ -57,7 +55,6 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
       if (updatedUser.error) {
         return toast.error(updatedUser.error);
       }
-      router.push(`/schedule/${props.session?.user.username}`);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -74,8 +71,8 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <div className="flex items-center gap-4">
                   <Avatar className="size-28">
                     <AvatarImage
-                      src={props.session?.user.avatar_url}
-                      alt={props.session?.user.name ?? userInitials}
+                      src={session?.user.avatar_url}
+                      alt={session?.user.name ?? userInitials}
                     />
                     <AvatarFallback className="bg-primary-foreground text-2xl">
                       {userInitials}
@@ -124,7 +121,7 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
                   </FormControl>
                   <FormMessage className="text-xs">
                     <FormDescription className="text-xs">
-                      Fale um pouco sobre você. Isto será exibido em sua página pessoal.
+                      Fale um pouco sobre você. Isto será exibido no seu calendário.
                     </FormDescription>
                   </FormMessage>
                 </FormItem>
@@ -132,18 +129,24 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
             />
           </CardContent>
           <CardFooter>
-            <Button
-              type="submit"
-              className="flex w-full items-center gap-2"
-              disabled={form.formState.isSubmitting}
-            >
-              Finalizar
-              {form.formState.isSubmitting ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <ArrowRight className="size-4" />
-              )}
-            </Button>
+            {form.formState.isSubmitSuccessful && isInRegister ? (
+              <Button asChild className="flex w-full items-center gap-2">
+                <Link href={`/schedule/${session.user.username}`}>
+                  Ir para o calendário
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="flex w-full items-center gap-2"
+                disabled={form.formState.isSubmitting}
+              >
+                Salvar
+                {form.formState.isSubmitting && (
+                  <Loader2 className="size-4 animate-spin" />
+                )}
+              </Button>
+            )}
           </CardFooter>
         </form>
       </Card>

@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -18,14 +18,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { createTimeInterval } from '@/lib/actions/time-intervals';
+import { updateTimeInterval } from '@/lib/actions/time-intervals';
 import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
 
 const timeIntervalsSelector = Array.from({ length: 11 }).map(
   (_, index) => `${(index + 8).toString().padStart(2, '0')}:00`,
 );
 
-export function TimeIntervalsForm() {
+interface TimeIntervalsFormProps {
+  isInRegister?: boolean;
+}
+
+export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormProps) {
   const router = useRouter();
 
   const form = useForm<
@@ -53,11 +57,13 @@ export function TimeIntervalsForm() {
 
   async function onSubmit(values: z.output<typeof timeIntervalsSchema>) {
     try {
-      const createdTimeIntervalResponse = await createTimeInterval(values);
+      const createdTimeIntervalResponse = await updateTimeInterval(values);
       if (createdTimeIntervalResponse.error) {
         return toast.error(createdTimeIntervalResponse.error);
       }
-      router.push('/register/update-profile');
+      if (isInRegister) {
+        router.push('/register/update-profile');
+      }
     } catch (error: any) {
       console.error(error.message);
     }
@@ -149,13 +155,26 @@ export function TimeIntervalsForm() {
             )}
           </CardContent>
           <CardFooter>
-            <Button
-              type="submit"
-              disabled={form.formState.isSubmitting}
-              className="w-full"
-            >
-              Próximo passo <ArrowRight className="ml-2 size-4" />
-            </Button>
+            {isInRegister ? (
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="w-full"
+              >
+                Próximo passo <ArrowRight className="ml-2 size-4" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="w-full"
+              >
+                Salvar{' '}
+                {form.formState.isSubmitting && (
+                  <Loader2 className="size-4 animate-spin" />
+                )}
+              </Button>
+            )}
           </CardFooter>
         </form>
       </Card>

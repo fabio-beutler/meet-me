@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 import { TimeIntervalsForm } from '@/components/forms/register-form/time-intervals-form';
 import { MultiStep } from '@/components/ui/multi-step';
+import { auth } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'Selecione sua disponibilidade | Meet Me',
@@ -12,6 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default function TimeIntervalsPage() {
+  const session = auth();
+
+  if (!session) {
+    return redirect('/');
+  }
+
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
       <header className="px-6">
@@ -23,7 +31,7 @@ export default function TimeIntervalsPage() {
       </header>
 
       <div className="mt-6">
-        <TimeIntervalsForm />
+        <TimeIntervalsForm isInRegister />
       </div>
     </main>
   );

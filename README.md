@@ -50,8 +50,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Add theme switcher
 - [x] Use Next-Auth provided Prisma adapter
 - [x] Add custom time picker
-- [ ] Add edit profile feature
-- [ ] Add delete profile feature
+- [x] Add edit profile feature
+- [x] Add delete profile feature
 - [ ] Use Drizzle instead of Prisma
 - [ ] Use Server Components to all non-form components
 - [ ] Add tests

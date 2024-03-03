@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { auth, signIn, signOut } from '@/lib/auth';
 
-export async function ConnectWithGoogle() {
+export async function ConnectWithGoogleForm() {
   const session = await auth();
 
   if (!session) {
