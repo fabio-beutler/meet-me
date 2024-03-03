@@ -20,8 +20,7 @@ export default async function UpdateProfilePage() {
       <header className="px-6">
         <strong className="text-2xl leading-relaxed">Bem vindo ao Meet Me!</strong>
         <p className="mb-6 leading-relaxed text-muted-foreground">
-          Precisamos de algumas informações para criar seu perfil! Ah, você pode editar
-          essas informações depois.
+          Seu perfil está criado! Ah, você pode editar essas informações depois.
         </p>
         <MultiStep size={2} currentStep={2} />
       </header>

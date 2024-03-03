@@ -19,7 +19,7 @@ export async function createTimeInterval({
     return { data: null, error: 'Usuário não encontrado' };
   }
 
-  const id = session.user.id;
+  const userId = session.user.id;
 
   await Promise.all(
     intervals.map((interval) => {
@@ -28,7 +28,7 @@ export async function createTimeInterval({
           week_day: interval.weekDay,
           time_start_in_minutes: interval.startTimeInMinutes,
           time_end_in_minutes: interval.endTimeInMinutes,
-          user_id: id,
+          user_id: userId,
         },
       });
     }),

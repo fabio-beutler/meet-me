@@ -57,7 +57,7 @@
 
 
 @layer utilities {
-  .invert-calendar-picker {
-    @apply [&::-webkit-calendar-picker-indicator]:brightness-30 [&::-webkit-calendar-picker-indicator]:invert;
+  .hide-calendar-picker {
+    @apply [&::-webkit-calendar-picker-indicator]:hidden;
   }
 }

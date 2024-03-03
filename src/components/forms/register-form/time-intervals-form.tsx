@@ -11,9 +11,19 @@ import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { createTimeInterval } from '@/lib/actions/time-intervals';
 import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
+
+const timeIntervalsSelector = Array.from({ length: 11 }).map(
+  (_, index) => `${(index + 8).toString().padStart(2, '0')}:00`,
+);
 
 export function TimeIntervalsForm() {
   const router = useRouter();
@@ -43,9 +53,9 @@ export function TimeIntervalsForm() {
 
   async function onSubmit(values: z.output<typeof timeIntervalsSchema>) {
     try {
-      const createdUser = await createTimeInterval(values);
-      if (createdUser.error) {
-        return toast.error(createdUser.error);
+      const createdTimeIntervalResponse = await createTimeInterval(values);
+      if (createdTimeIntervalResponse.error) {
+        return toast.error(createdTimeIntervalResponse.error);
       }
       router.push('/register/update-profile');
     } catch (error: any) {
@@ -57,14 +67,10 @@ export function TimeIntervalsForm() {
     <Form {...form}>
       <Box asChild className="flex flex-col gap-4">
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div
-            id="intervals container"
-            className="divide-y divide-muted-foreground/20 rounded-md border border-muted-foreground/20"
-          >
+          <div className="divide-y divide-muted-foreground/20 rounded-md border border-muted-foreground/20">
             {fields.map((arrayField, index) => (
               <div
                 key={arrayField.id}
-                id="interval item"
                 className="flex items-center justify-between px-4 py-3"
               >
                 <FormField
@@ -72,7 +78,7 @@ export function TimeIntervalsForm() {
                   name={`intervals.${index}.enabled`}
                   render={({ field: { value, onChange, ...field } }) => (
                     <FormItem>
-                      <div id="interval day" className="flex items-center gap-3">
+                      <div className="flex items-center gap-3">
                         <FormControl>
                           <Checkbox
                             {...field}
@@ -86,24 +92,50 @@ export function TimeIntervalsForm() {
                     </FormItem>
                   )}
                 />
-                <div id="interval inputs" className="flex items-center gap-2">
-                  <Input
-                    type="time"
-                    step={3600}
-                    min={arrayField.startTime}
-                    max={arrayField.endTime}
-                    className="invert-calendar-picker"
-                    disabled={!watchingIntervals[index].enabled}
-                    {...form.register(`intervals.${index}.startTime`)}
+                <div className="flex items-center gap-2">
+                  <FormField
+                    control={form.control}
+                    name={`intervals.${index}.startTime`}
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Select
+                        defaultValue="08:00"
+                        disabled={!watchingIntervals[index].enabled}
+                        onValueChange={onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a fruit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {timeIntervalsSelector.map((time) => (
+                            <SelectItem key={time} value={time} showIndicator={false}>
+                              {time}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                   />
-                  <Input
-                    type="time"
-                    step={3600}
-                    min={arrayField.startTime}
-                    max={arrayField.endTime}
-                    className="invert-calendar-picker"
-                    disabled={!watchingIntervals[index].enabled}
-                    {...form.register(`intervals.${index}.endTime`)}
+                  <FormField
+                    control={form.control}
+                    name={`intervals.${index}.endTime`}
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <Select
+                        defaultValue="08:00"
+                        disabled={!watchingIntervals[index].enabled}
+                        onValueChange={onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a fruit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {timeIntervalsSelector.map((time) => (
+                            <SelectItem key={time} value={time} showIndicator={false}>
+                              {time}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                   />
                 </div>
               </div>

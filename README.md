@@ -49,7 +49,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Use Next-Auth beta
 - [x] Add theme switcher
 - [x] Use Next-Auth provided Prisma adapter
-- [ ] Add custom time picker
+- [x] Add custom time picker
 - [ ] Add edit profile feature
 - [ ] Add delete profile feature
 - [ ] Use Drizzle instead of Prisma
