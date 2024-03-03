@@ -20,3 +20,17 @@ export async function updateUser(values: z.infer<typeof updateProfileSchema>) {
 
   return { data: updatedUser, error: null };
 }
+
+export async function deleteUser() {
+  const session = await auth();
+
+  if (!session || !session.user.id) {
+    return { data: null, error: 'Usuário não autenticado' };
+  }
+
+  const userId = session.user.id;
+
+  await prisma.user.delete({ where: { id: userId } });
+
+  return { data: `Usuário ${session.user.name} removido`, error: null };
+}

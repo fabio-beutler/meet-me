@@ -35,8 +35,15 @@ export async function ConnectWithGoogleForm() {
         await signOut();
       }}
     >
-      <Button type="submit" variant="default">
-        sair
+      <Button type="submit" variant="outline" className="flex items-center gap-2">
+        <Image
+          src="/google-logo.webp"
+          alt="Google Logo"
+          width={40}
+          height={40}
+          className="h-full w-full"
+        />
+        Sair
       </Button>
     </form>
   );

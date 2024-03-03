@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { ConnectWithGoogleForm } from '@/components/forms/register-form/connect-with-google-form';
 import { ScheduleForm } from '@/components/forms/schedule/schedule-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 interface ScheduleUserCalendarProps {
@@ -30,6 +32,8 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
     },
   });
 
+  const session = await auth();
+
   if (!user) {
     return notFound();
   }
@@ -42,6 +46,11 @@ export default async function ScheduleUserCalendarPage(props: ScheduleUserCalend
 
   return (
     <main className="mx-auto max-w-[852px] px-4 pb-4 pt-20">
+      {session && (
+        <div className="fixed right-16 top-3">
+          <ConnectWithGoogleForm />
+        </div>
+      )}
       <header className="flex flex-col items-center">
         <Avatar className="size-20">
           <AvatarImage

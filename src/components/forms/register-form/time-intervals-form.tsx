@@ -40,6 +40,7 @@ export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormPro
     resolver: zodResolver(timeIntervalsSchema),
     defaultValues: {
       intervals: [
+        // TODO - Load from user data
         { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
         { weekDay: 1, enabled: true, startTime: '08:00', endTime: '18:00' },
         { weekDay: 2, enabled: true, startTime: '08:00', endTime: '18:00' },

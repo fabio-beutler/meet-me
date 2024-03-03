@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ConnectWithGoogleForm } from '@/components/forms/register-form/connect-with-google-form';
 import { DeleteProfileForm } from '@/components/forms/register-form/delete-profile-form';
 import { TimeIntervalsForm } from '@/components/forms/register-form/time-intervals-form';
 import { UpdateProfileForm } from '@/components/forms/register-form/update-profile-form';
@@ -30,6 +31,10 @@ export default async function ProfilePage({ params }: { params: { username: stri
 
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
+      <div className="fixed right-16 top-3 z-10">
+        <ConnectWithGoogleForm />
+      </div>
+
       <header className="flex items-center justify-between px-6">
         <h1 className="text-xl leading-relaxed">
           Atualize seu perfil, {session?.user.name}
@@ -44,6 +49,7 @@ export default async function ProfilePage({ params }: { params: { username: stri
       <div className="mt-6 space-y-2">
         <UpdateProfileForm session={session} />
         <TimeIntervalsForm />
+
         <DeleteProfileForm />
       </div>
     </main>

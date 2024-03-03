@@ -7,7 +7,7 @@ export async function getGoogleOAuthToken(userId: string) {
   const account = await prisma.account.findFirstOrThrow({
     where: {
       provider: 'google',
-      user_id: userId,
+      userId: userId,
     },
   });
 

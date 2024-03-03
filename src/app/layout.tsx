@@ -39,7 +39,8 @@ export default function RootLayout({
         <Providers>
           {children}
           <Toaster richColors />
-          <ThemeSwitcherButton className="fixed right-4 top-4" />
+          <ThemeSwitcherButton className="fixed right-4 top-3 z-10" />
+          <div className="fixed left-0 right-0 top-0 h-16 bg-background/70 md:hidden" />
         </Providers>
       </body>
     </html>

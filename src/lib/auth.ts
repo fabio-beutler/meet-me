@@ -41,8 +41,13 @@ export const config = {
       }
       return true;
     },
+
     session: async ({ session, user }) => {
       return { ...session, user };
+    },
+    redirect: async ({ url, baseUrl }) => {
+      if (url.startsWith('/schedule')) return url;
+      return baseUrl;
     },
   },
 } satisfies NextAuthConfig;
