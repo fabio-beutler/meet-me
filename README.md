@@ -46,7 +46,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Create appointments availability
 - [x] List available appointments
 - [x] Add appointment to google calendar
-- [ ] Use Next-Auth beta
+- [x] Use Next-Auth beta
+- [ ] Add theme switcher
+- [ ] Use Next-Auth provided Prisma adapter
+- [ ] Add custom time picker
 - [ ] Add edit profile feature
 - [ ] Add delete profile feature
 - [ ] Use Drizzle instead of Prisma
