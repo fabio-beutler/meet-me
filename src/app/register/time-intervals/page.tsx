@@ -19,7 +19,7 @@ export default function TimeIntervalsPage() {
         <p className="mb-6 leading-relaxed text-muted-foreground">
           Defina o intervalo de horários que você está disponível em cada dia da semana.
         </p>
-        <MultiStep size={4} currentStep={3} />
+        <MultiStep size={2} currentStep={1} />
       </header>
 
       <div className="mt-6">

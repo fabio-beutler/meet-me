@@ -9,13 +9,14 @@ import { auth } from '@/lib/auth';
 export default async function Home() {
   const session = await auth();
 
-  if (session && session.user) {
+  if (session) {
     const response = await fetch(
-      `http://localhost:3000/api/user/${session?.user.username}/timeIntervals`,
+      `http://localhost:3000/api/user/${session.user.username}/timeIntervals`,
     ).then((res) => res.json());
     if (response.timeIntervals.length === 0) {
-      console.log('no time intervals');
       return redirect('/register/time-intervals');
+    } else {
+      return redirect(`/profile/${session.user.username}`);
     }
   }
 

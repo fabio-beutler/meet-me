@@ -33,7 +33,7 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   const userInitials =
     props.session?.user.name
-      .split(' ')
+      ?.split(' ')
       .map((word) => word[0])
       .join('') || '';
 
@@ -66,7 +66,7 @@ export function UpdateProfileForm(props: UpdateProfileFormProps) {
               <Avatar className="size-20">
                 <AvatarImage
                   src={props.session?.user.avatar_url}
-                  alt={props.session?.user.name}
+                  alt={props.session?.user.name ?? userInitials}
                 />
                 <AvatarFallback className="bg-primary-foreground text-2xl">
                   {userInitials}

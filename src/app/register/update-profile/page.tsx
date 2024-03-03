@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
 
 import { UpdateProfileForm } from '@/components/forms/register-form/update-profile-form';
 import { MultiStep } from '@/components/ui/multi-step';
-import { authOptions } from '@/lib/next-auth';
+import { auth } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'Atualize seu perfil | Meet Me',
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function UpdateProfilePage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
@@ -24,7 +23,7 @@ export default async function UpdateProfilePage() {
           Precisamos de algumas informações para criar seu perfil! Ah, você pode editar
           essas informações depois.
         </p>
-        <MultiStep size={4} currentStep={4} />
+        <MultiStep size={2} currentStep={2} />
       </header>
 
       <div className="mt-6 ">

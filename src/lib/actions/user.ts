@@ -1,10 +1,9 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { getServerSession } from 'next-auth/next';
 import { z } from 'zod';
 
-import { authOptions } from '@/lib/next-auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { updateProfileSchema, userSchema } from '@/lib/validations/user';
 
@@ -28,7 +27,7 @@ export async function createUser(user: z.infer<typeof userSchema>) {
 }
 
 export async function updateUser(values: z.infer<typeof updateProfileSchema>) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) {
     return { data: null, error: 'Usuário não autenticado' };
