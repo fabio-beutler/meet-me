@@ -1,7 +1,11 @@
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth, { NextAuthConfig } from 'next-auth';
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 
+import { prisma } from '@/lib/prisma';
+
 export const config = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID ?? '',
@@ -39,11 +43,6 @@ export const config = {
     },
     session: async ({ session, user }) => {
       return { ...session, user };
-    },
-    authorized: async ({ request, auth }) => {
-      const { pathname } = request.nextUrl;
-      if (pathname.match(/^\/register\/.+$/)) return !!auth;
-      return true;
     },
   },
 } satisfies NextAuthConfig;
