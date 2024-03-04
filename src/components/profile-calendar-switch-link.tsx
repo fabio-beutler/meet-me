@@ -13,10 +13,15 @@ interface GoToProfileLinkProps {
   };
 }
 
-export function GoToProfileLink({ session }: GoToProfileLinkProps) {
+export function ProfileCalendarSwitchLink({ session }: GoToProfileLinkProps) {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/profile')) return null;
+  if (pathname.startsWith(`/profile`))
+    return (
+      <Button asChild variant="default" className="text-base">
+        <Link href={`/calendar/${session.user.username}`}>Calendário</Link>
+      </Button>
+    );
 
   return (
     <Button asChild variant="outline" className="text-base">
