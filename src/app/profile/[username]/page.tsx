@@ -46,7 +46,7 @@ export default async function ProfilePage({ params }: { params: { username: stri
           Atualize seu perfil, {session?.user.name}
         </h1>
         <Button asChild>
-          <Link href={`/schedule/${session.user.username}`}>
+          <Link href={`/calendar/${session.user.username}`}>
             Ir para o calendário <ChevronRight className="size-4" />
           </Link>
         </Button>
