@@ -14,7 +14,11 @@ export async function ConnectWithGoogleForm() {
           await signIn('google');
         }}
       >
-        <Button type="submit" variant="outline" className="flex items-center gap-2">
+        <Button
+          type="submit"
+          variant="outline"
+          className="flex items-center gap-2 text-base"
+        >
           <Image
             src="/google-logo.webp"
             alt="Google Logo"
@@ -35,7 +39,11 @@ export async function ConnectWithGoogleForm() {
         await signOut();
       }}
     >
-      <Button type="submit" variant="outline" className="flex items-center gap-2">
+      <Button
+        type="submit"
+        variant="outline"
+        className="flex items-center gap-2 text-base"
+      >
         <Image
           src="/google-logo.webp"
           alt="Google Logo"
