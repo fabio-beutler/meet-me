@@ -5,7 +5,7 @@ import { Roboto_Flex } from 'next/font/google';
 import React from 'react';
 
 import { Providers } from '@/app/providers';
-import { ThemeSwitcherButton } from '@/components/theme-switcher-button';
+import { FloatingHeader } from '@/components/floating-header';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
@@ -39,8 +39,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <Toaster richColors />
-          <ThemeSwitcherButton className="fixed right-4 top-3 z-10" />
-          <div className="fixed left-0 right-0 top-0 h-16 bg-background/70 md:hidden" />
+          <FloatingHeader />
         </Providers>
       </body>
     </html>
