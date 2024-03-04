@@ -13,12 +13,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TimeIntervalsPage() {
-  const session = auth();
+export default async function TimeIntervalsPage() {
+  const session = await auth();
 
   if (!session) {
     return redirect('/');
   }
+  const timeIntervals = await fetch(
+    `http://localhost:3000/api/${session.user.username}/time-intervals`,
+  );
+
+  console.log(timeIntervals);
 
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">

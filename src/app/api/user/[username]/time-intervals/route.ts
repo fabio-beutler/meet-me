@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-
 import { prisma } from '@/lib/prisma';
 
 export const GET = async (
-  request: NextRequest,
+  request: Request,
   {
     params,
   }: {
@@ -18,5 +16,5 @@ export const GET = async (
       timeIntervals: true,
     },
   });
-  return NextResponse.json(userTimeIntervals);
+  return Response.json(userTimeIntervals);
 };

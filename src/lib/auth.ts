@@ -46,7 +46,7 @@ export const config = {
       return { ...session, user };
     },
     redirect: async ({ url, baseUrl }) => {
-      if (url.startsWith('/schedule')) return url;
+      if (url.startsWith('/calendar')) return url;
       return baseUrl;
     },
   },

@@ -29,6 +29,12 @@ export default async function ProfilePage({ params }: { params: { username: stri
     return notFound();
   }
 
+  const response = await fetch(
+    `http://localhost:3000/api/user/${session.user.username}/time-intervals`,
+  ).then((res) => res.json());
+
+  console.log({ timeIntervals: response.timeIntervals });
+
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
       <div className="fixed right-16 top-3 z-10">

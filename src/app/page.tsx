@@ -11,7 +11,7 @@ export default async function Home() {
 
   if (session) {
     const response = await fetch(
-      `http://localhost:3000/api/user/${session.user.username}/timeIntervals`,
+      `http://localhost:3000/api/user/${session.user.username}/time-intervals`,
     ).then((res) => res.json());
     if (response.timeIntervals.length === 0) {
       return redirect('/register/time-intervals');

@@ -117,7 +117,7 @@ export function UpdateProfileForm({
                 <FormItem>
                   <FormLabel>Sobre você</FormLabel>
                   <FormControl>
-                    <Textarea autoFocus className="min-h-32" {...field} />
+                    <Textarea autoFocus={isInRegister} className="min-h-32" {...field} />
                   </FormControl>
                   <FormMessage className="text-xs">
                     <FormDescription className="text-xs">
