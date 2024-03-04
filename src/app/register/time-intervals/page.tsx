@@ -23,8 +23,6 @@ export default async function TimeIntervalsPage() {
     `http://localhost:3000/api/${session.user.username}/time-intervals`,
   );
 
-  console.log(timeIntervals);
-
   return (
     <main className="mx-auto mb-4 mt-20 max-w-[572px] px-4">
       <header className="px-6">
@@ -36,7 +34,7 @@ export default async function TimeIntervalsPage() {
       </header>
 
       <div className="mt-6">
-        <TimeIntervalsForm isInRegister />
+        <TimeIntervalsForm isInRegister username={session.user.username} />
       </div>
     </main>
   );

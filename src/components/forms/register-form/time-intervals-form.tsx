@@ -1,8 +1,10 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -19,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { updateTimeInterval } from '@/lib/actions/time-intervals';
+import { api } from '@/lib/axios';
 import { timeIntervalsSchema, WeekDay } from '@/lib/validations/datetime';
 
 const timeIntervalsSelector = Array.from({ length: 11 }).map(
@@ -27,10 +30,65 @@ const timeIntervalsSelector = Array.from({ length: 11 }).map(
 
 interface TimeIntervalsFormProps {
   isInRegister?: boolean;
+  username: string;
 }
 
-export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormProps) {
+interface TimeIntervalsQueryResponse {
+  timeIntervals: {
+    id: string;
+    week_day: number;
+    time_start_in_minutes: number;
+    time_end_in_minutes: number;
+    user_id: string;
+    created_at: string;
+  }[];
+}
+
+export function TimeIntervalsForm({
+  isInRegister = false,
+  username,
+}: TimeIntervalsFormProps) {
   const router = useRouter();
+
+  const timeIntervalsQuery = useQuery({
+    queryKey: ['time-intervals'],
+    queryFn: async () => {
+      return api
+        .get<TimeIntervalsQueryResponse>(`/user/${username}/time-intervals`)
+        .then((response) => response.data);
+    },
+  });
+
+  const intervals = useMemo(() => {
+    const intervals = [
+      { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 1, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 2, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 3, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 4, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 5, enabled: false, startTime: '08:00', endTime: '18:00' },
+      { weekDay: 6, enabled: false, startTime: '08:00', endTime: '18:00' },
+    ];
+    if (timeIntervalsQuery.isSuccess) {
+      timeIntervalsQuery.data.timeIntervals.map((timeInterval) => {
+        const index = intervals.findIndex(
+          (interval) => interval.weekDay === timeInterval.week_day,
+        );
+        if (index !== -1) {
+          intervals[index] = {
+            ...intervals[index],
+            enabled: true,
+            startTime:
+              (timeInterval.time_start_in_minutes / 60).toString().padStart(2, '0') +
+              ':00',
+            endTime:
+              (timeInterval.time_end_in_minutes / 60).toString().padStart(2, '0') + ':00',
+          };
+        }
+      });
+    }
+    return intervals;
+  }, [timeIntervalsQuery.data, timeIntervalsQuery.isSuccess]);
 
   const form = useForm<
     z.input<typeof timeIntervalsSchema>,
@@ -38,17 +96,8 @@ export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormPro
     z.output<typeof timeIntervalsSchema>
   >({
     resolver: zodResolver(timeIntervalsSchema),
-    defaultValues: {
-      intervals: [
-        // TODO - Load from user data
-        { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 1, enabled: true, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 2, enabled: true, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 3, enabled: true, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 4, enabled: true, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 5, enabled: true, startTime: '08:00', endTime: '18:00' },
-        { weekDay: 6, enabled: false, startTime: '08:00', endTime: '18:00' },
-      ],
+    values: {
+      intervals: intervals,
     },
   });
 
@@ -106,12 +155,12 @@ export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormPro
                       name={`intervals.${index}.startTime`}
                       render={({ field: { value, onChange, ...field } }) => (
                         <Select
-                          defaultValue="08:00"
+                          defaultValue={value}
                           disabled={!watchingIntervals[index].enabled}
                           onValueChange={onChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="08:00" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {timeIntervalsSelector.map((time) => (
@@ -128,12 +177,12 @@ export function TimeIntervalsForm({ isInRegister = false }: TimeIntervalsFormPro
                       name={`intervals.${index}.endTime`}
                       render={({ field: { value, onChange, ...field } }) => (
                         <Select
-                          defaultValue="08:00"
+                          defaultValue={value}
                           disabled={!watchingIntervals[index].enabled}
                           onValueChange={onChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="08:00" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {timeIntervalsSelector.map((time) => (
