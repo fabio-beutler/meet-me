@@ -23,9 +23,12 @@ export function ProfileCalendarSwitchLink({ session }: GoToProfileLinkProps) {
       </Button>
     );
 
-  return (
-    <Button asChild variant="outline" className="text-base">
-      <Link href={`/profile/${session.user.username}`}>Perfil</Link>
-    </Button>
-  );
+  if (pathname.startsWith(`/calendar`))
+    return (
+      <Button asChild variant="outline" className="text-base">
+        <Link href={`/profile/${session.user.username}`}>Perfil</Link>
+      </Button>
+    );
+
+  return null;
 }
